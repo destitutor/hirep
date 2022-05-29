@@ -1,6 +1,5 @@
 package net.hexabrain.hireo.config;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -25,9 +24,10 @@ import java.util.List;
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
+                .antMatchers("/login", "/sign-up", "/").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
             )
@@ -35,6 +35,10 @@ public class WebSecurityConfig {
                 .loginPage("/login")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/", true)
+                .and()
+            .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
                 .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
