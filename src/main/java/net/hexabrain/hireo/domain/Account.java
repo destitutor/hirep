@@ -3,13 +3,13 @@ package net.hexabrain.hireo.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Getter @ToString
+@Getter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,6 +26,11 @@ public abstract class Account {
 
     @Enumerated(EnumType.STRING)
     private AccountType type;
+
+    private String name;
+
+    @OneToMany(mappedBy = "author")
+    private List<Review> reviews;
 
     protected Account(String email, String password, AccountType type) {
         this.email = email;

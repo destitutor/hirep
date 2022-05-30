@@ -24,7 +24,7 @@ public class Review {
     @Column(nullable = false)
     private int rating;
 
-    @Column(name = "posted_at", nullable = false, columnDefinition = "DATE")
+    @Column(nullable = false, columnDefinition = "DATE")
     private LocalDate postedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

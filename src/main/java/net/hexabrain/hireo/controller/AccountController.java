@@ -43,11 +43,6 @@ public class AccountController {
             return "sign-up";
         }
 
-        if (!account.getPassword().equals(account.getPasswordConfirm())) {
-            bindingResult.reject("not-match.password");
-            return "sign-up";
-        }
-
         try {
             accountService.save(accountMapper.toEntity(account));
         } catch (DataIntegrityViolationException e) {
