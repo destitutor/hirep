@@ -1,7 +1,8 @@
 package net.hexabrain.hireo.repository;
 
 import net.hexabrain.hireo.domain.Job;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface JobRepository extends JpaRepository<Job, Long> {
+public interface JobRepository extends PagingAndSortingRepository<Job, Long>, QuerydslPredicateExecutor<Job> {
 }

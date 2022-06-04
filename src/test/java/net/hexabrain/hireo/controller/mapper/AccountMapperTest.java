@@ -26,7 +26,7 @@ class AccountMapperTest {
     @MethodSource
     void resolve(AccountType dtoType, Class<?> actualType) {
         AccountDto dto = new AccountDto(
-                "test@test.com", "testtest", "testtest", dtoType
+                "test@test.com", "testtest", "testtest", dtoType, "asd"
         );
         Account mappedAccount = mapper.toEntity(dto);
 

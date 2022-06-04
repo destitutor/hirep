@@ -1,5 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.7.0'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
@@ -25,12 +26,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-
-    implementation 'org.mapstruct:mapstruct:1.5.0.RC1'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.0.RC1'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    implementation 'com.querydsl:querydsl-apt:5.0.0'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.mapstruct:mapstruct:1.5.0.RC1'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.0.RC1'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'mysql:mysql-connector-java'
@@ -43,3 +46,24 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+/* ============ QUERYDSL ============ */
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+/* ================================== */
