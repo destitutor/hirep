@@ -1,8 +1,10 @@
 package net.hexabrain.hireo.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.hexabrain.hireo.domain.Account;
 import net.hexabrain.hireo.repository.AccountRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
@@ -46,5 +49,15 @@ public class AccountService implements UserDetailsService {
 
     public boolean isExist(Long id) {
         return accountRepository.existsById(id);
+    }
+
+    public Account getCurrentAccount() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("principal {}", principal);
+        if (principal instanceof UserDetails) {
+            return findOne(((UserDetails) principal).getUsername());
+        } else {
+            return findOne(principal.toString());
+        }
     }
 }

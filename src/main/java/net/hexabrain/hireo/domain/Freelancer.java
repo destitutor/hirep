@@ -14,4 +14,8 @@ public class Freelancer extends Account {
     public Freelancer(String email, String password, AccountType type) {
         super(email, password, type);
     }
+
+    public Freelancer(String email, String password, AccountType type, Profile profile) {
+        super(email, password, type, profile);
+    }
 }

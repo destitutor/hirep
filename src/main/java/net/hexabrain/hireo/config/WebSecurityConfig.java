@@ -27,17 +27,17 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .antMatchers("/login", "/sign-up", "/").permitAll()
+                .antMatchers("/account/login", "/account/new", "/").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
             )
             .formLogin()
-                .loginPage("/login")
+                .loginPage("/account/login")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/", true)
                 .and()
             .logout()
-                .logoutUrl("/logout")
+                .logoutUrl("/account/logout")
                 .logoutSuccessUrl("/")
                 .and()
             .sessionManagement()

@@ -21,8 +21,7 @@ public class Company {
 
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "company")
     private Address address;
 
     @OneToMany(mappedBy = "company")

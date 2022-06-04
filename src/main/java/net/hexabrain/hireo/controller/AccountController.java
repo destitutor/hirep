@@ -2,6 +2,7 @@ package net.hexabrain.hireo.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.hexabrain.hireo.domain.Account;
 import net.hexabrain.hireo.transport.mapper.AccountMapper;
 import net.hexabrain.hireo.transport.dto.AccountDto;
 import net.hexabrain.hireo.domain.AccountType;
@@ -13,11 +14,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
 @Slf4j
 @Controller
+@RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
@@ -28,7 +31,7 @@ public class AccountController {
         return "login";
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping("/new")
     public String signUp(Model model) {
         AccountDto account = new AccountDto();
         account.setType(AccountType.FREELANCER);
@@ -36,7 +39,7 @@ public class AccountController {
         return "sign-up";
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/new")
     public String signUp(@Valid @ModelAttribute("account") AccountDto account, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult has errors: {}", bindingResult);
@@ -50,6 +53,16 @@ public class AccountController {
             bindingResult.reject("exists.email");
             return "sign-up";
         }
-        return "redirect:/login";
+        return "redirect:/account/login";
+    }
+
+    @GetMapping("/settings")
+    public String settings(Model model) {
+        Account currentAccount = accountService.getCurrentAccount();
+        log.info("currentAccount: {}", currentAccount);
+        AccountDto account = accountMapper.toDto(currentAccount);
+        model.addAttribute("account", account);
+        log.info("account: {}", account);
+        return "account/settings";
     }
 }

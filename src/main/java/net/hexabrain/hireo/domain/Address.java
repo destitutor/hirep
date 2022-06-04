@@ -20,6 +20,10 @@ public class Address {
     @Column(nullable = false)
     private String countryCode;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
     public Address(Coordinate coordinate, String countryCode) {
         this.coordinate = coordinate;
         this.countryCode = countryCode;

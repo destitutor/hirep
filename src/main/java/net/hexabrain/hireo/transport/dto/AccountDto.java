@@ -29,4 +29,6 @@ public class AccountDto {
 
     @NotNull
     private AccountType type;
+
+    private String name;
 }

@@ -9,6 +9,10 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper extends BaseMapper<AccountDto, Account> {
+
+    @Mapping(target = "name", source = "profile.name")
+    AccountDto toDto(Account e);
+
     @ObjectFactory
     default Account resolve(AccountDto dto) {
         if (dto.getType().equals(AccountType.EMPLOYER)) {
