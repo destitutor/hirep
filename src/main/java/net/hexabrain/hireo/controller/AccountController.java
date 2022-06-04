@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @Controller
-@RequestMapping("/account")
+@RequestMapping("/accounts")
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
@@ -56,7 +56,7 @@ public class AccountController {
         return "redirect:/account/login";
     }
 
-    @GetMapping("/settings")
+    @GetMapping("/manage")
     public String settings(Model model) {
         Account currentAccount = accountService.getCurrentAccount();
         log.info("currentAccount: {}", currentAccount);

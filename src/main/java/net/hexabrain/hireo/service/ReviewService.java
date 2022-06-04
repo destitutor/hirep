@@ -10,6 +10,7 @@ import net.hexabrain.hireo.repository.AccountRepository;
 import net.hexabrain.hireo.repository.CompanyRepository;
 import net.hexabrain.hireo.repository.ReviewRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,8 +29,8 @@ public class ReviewService {
         Optional<Company> company = companyRepository.findById(companyId);
 
         if (company.isPresent()) {
-            String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Account account = accountRepository.findByEmail(email);
+            UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Account account = accountRepository.findByEmail(user.getUsername());
 
             review.setAuthor(account);
             review.setCompany(company.get());

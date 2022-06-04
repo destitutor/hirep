@@ -17,4 +17,8 @@ public class CompanyService {
     public boolean isExist(Long id) {
         return companyRepository.existsById(id);
     }
+
+    public long count() {
+            return companyRepository.count();
+    }
 }

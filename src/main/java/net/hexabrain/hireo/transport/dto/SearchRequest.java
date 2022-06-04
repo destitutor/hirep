@@ -18,6 +18,12 @@ public class SearchRequest {
 
     private List<String> tags;
 
+    private double lng;
+
+    private double lat;
+
+    private double radius;
+
     public int getStartSalary() {
         if (salary == null) {
             return 0;

@@ -1,4 +1,4 @@
-package net.hexabrain.hireo.config;
+package net.hexabrain.hireo.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,22 +22,22 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .antMatchers("/account/login", "/account/new", "/").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                    .antMatchers("/accounts/login", "/accounts/new", "/",
+                            "/js/**", "/sass/**", "/images/**", "/fonts/**", "/css/**").permitAll()
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
             )
             .formLogin()
-                .loginPage("/account/login")
+                .loginPage("/accounts/login")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/", true)
                 .and()
             .logout()
-                .logoutUrl("/account/logout")
+                .logoutUrl("/accounts/logout")
                 .logoutSuccessUrl("/")
                 .and()
             .sessionManagement()

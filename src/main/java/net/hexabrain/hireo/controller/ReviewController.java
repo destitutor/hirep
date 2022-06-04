@@ -26,10 +26,10 @@ public class ReviewController {
                          @Valid @ModelAttribute("review") ReviewDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult has errors: {}", bindingResult);
-            return "redirect:/company/profile/{id}";
+            return "redirect:/company/{id}";
         }
 
         reviewService.post(id, reviewMapper.toEntity(dto));
-        return "redirect:/company/profile/{id}";
+        return "redirect:/company/{id}";
     }
 }

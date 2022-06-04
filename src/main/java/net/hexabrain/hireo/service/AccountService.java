@@ -51,6 +51,10 @@ public class AccountService implements UserDetailsService {
         return accountRepository.existsById(id);
     }
 
+    public long count() {
+        return accountRepository.count();
+    }
+
     public Account getCurrentAccount() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("principal {}", principal);
