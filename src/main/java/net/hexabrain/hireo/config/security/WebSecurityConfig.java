@@ -23,7 +23,7 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfig {
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
                     .antMatchers("/accounts/login", "/accounts/new", "/",
