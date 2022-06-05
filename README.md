@@ -1,3 +1,17 @@
+# 2. 서버 사이드
+## 기술 스택
+- JAVA 11
+- Spring Framework
+  - Spring Boot 2.7.0
+  - Spring Data JPA
+  - Spring Security
+- MySQL 5.7
+- Test Framework
+  - JUnit 5
+  - Mockito
+- Nginx
+- OAuth2
+
 # 3. 기능 구현
 - [ ] 계정
   - [x] 로그인 기능 구현
