@@ -29,6 +29,7 @@ class AccountServiceTest {
     @InjectMocks
     AccountService accountService;
 
+
     @Test
     void save() {
         Account expectedAccount = new Employer("test@test.com", "test1234", AccountType.EMPLOYER);
