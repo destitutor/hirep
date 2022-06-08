@@ -7,26 +7,26 @@ package net.hexabrain.hireo.utils;
  */
 public class HangulUtils {
     /* 호환용 한글 자모(Hangul Compatibility Jamo) 유니코드 코드 값 */
-    private static final int JONGSUNG_START = 0x3131;
-    private static final int JONGSUNG_END = 0x314E;
-    private static final int JUNGSUNG_START = 0x314F;
-    private static final int JUNGSUNG_END = 0x3163;
+    private static final int LAST_CONSONANT_START = 0x3131;
+    private static final int LAST_CONSONANT_END = 0x314E;
+    private static final int MIDDLE_VOWEL_START = 0x314F;
+    private static final int MIDDLE_VOWEL_END = 0x3163;
 
     /* 한글 소리 마디(Hangul Syllables) 유니코드 코드 값 */
     private static final int COMPLETE_TYPE_START = 0xAC00;
     private static final int COMPLETE_TYPE_END = 0xD7A3;
 
     /* 초중종성 순서 */
-    private static final char[] CHOSUNG = {
+    private static final char[] FIRST_CONSONANTS = {
             'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
     };
-    private static final char[] JUNGSUNG = {
+    private static final char[] MIDDLE_VOWELS = {
             'ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'
     };
-    private static final char[] JONGSUNG = {
+    private static final char[] LAST_CONSONANTS = {
             ' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
     };
-    private static final char[] DOUBLE_FINAL_CONSONANT = {
+    private static final char[] DOUBLE_FINAL_CONSONANTS = {
             'ㄳ', 'ㄵ', 'ㄶ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅄ'
     };
 
@@ -46,8 +46,8 @@ public class HangulUtils {
      * @param c 문자
      * @return 초성이면 true, 아니면 false
      */
-    public static boolean isChosung(char c) {
-        return isJongsung(c) && !isDoubleFinalConsonant(c);
+    public static boolean isFirstConsonant(char c) {
+        return isLastConsonant(c) && !isDoubleFinalConsonant(c);
     }
 
     /**
@@ -55,8 +55,8 @@ public class HangulUtils {
      * @param c 문자
      * @return 중성이면 true, 아니면 false
      */
-    public static boolean isJungsung(char c) {
-        return (c >= JUNGSUNG_START && c <= JUNGSUNG_END);
+    public static boolean isMiddleVowel(char c) {
+        return (c >= MIDDLE_VOWEL_START && c <= MIDDLE_VOWEL_END);
     }
 
     /**
@@ -64,8 +64,8 @@ public class HangulUtils {
      * @param c 문자
      * @return 종성이면 true, 아니면 false
      */
-    public static boolean isJongsung(char c) {
-        return (c >= JONGSUNG_START && c <= JONGSUNG_END);
+    public static boolean isLastConsonant(char c) {
+        return (c >= LAST_CONSONANT_START && c <= LAST_CONSONANT_END);
     }
 
     /** 입력된 문자가 겹받침인지 확인한다.
@@ -73,8 +73,8 @@ public class HangulUtils {
      * @return 겹받침이면 true, 아니면 false
      */
     public static boolean isDoubleFinalConsonant(char c) {
-        for (int i = DOUBLE_FINAL_CONSONANT.length - 1; i >= 0; i--) {
-            if (DOUBLE_FINAL_CONSONANT[i] == c) {
+        for (int i = DOUBLE_FINAL_CONSONANTS.length - 1; i >= 0; i--) {
+            if (DOUBLE_FINAL_CONSONANTS[i] == c) {
                 return true;
             }
         }
@@ -87,7 +87,7 @@ public class HangulUtils {
      * @return 한글이면 true, 아니면 false
      */
     public static boolean isHangul(char c) {
-        return isJungsung(c) || isJongsung(c) || isCompleteType(c);
+        return isMiddleVowel(c) || isLastConsonant(c) || isCompleteType(c);
     }
 
     /**
@@ -110,15 +110,15 @@ public class HangulUtils {
      * @return 초성
      * @throws IllegalArgumentException 문자가 초성 혹은 완성형 문자가 아닐 경우
      */
-    public static char getChosung(char c) {
-        if (!isChosung(c) && !isCompleteType(c)) {
+    public static char getFirstConsonant(char c) {
+        if (!isFirstConsonant(c) && !isCompleteType(c)) {
             throw new IllegalArgumentException("입력된 문자에 초성이 없습니다.");
         }
 
-        if (isChosung(c)) {
+        if (isFirstConsonant(c)) {
             return c;
         } else {
-            return CHOSUNG[((c - COMPLETE_TYPE_START) / JONGSUNG.length) / JUNGSUNG.length];
+            return FIRST_CONSONANTS[((c - COMPLETE_TYPE_START) / LAST_CONSONANTS.length) / MIDDLE_VOWELS.length];
         }
     }
 
@@ -128,15 +128,15 @@ public class HangulUtils {
      * @return 중성
      * @throws IllegalArgumentException 문자가 중성 혹은 완성형 문자가 아닐 경우
      */
-    public static char getJungsung(char c) {
-        if (!isJungsung(c) && !isCompleteType(c)) {
+    public static char getMiddleVowel(char c) {
+        if (!isMiddleVowel(c) && !isCompleteType(c)) {
             throw new IllegalArgumentException("입력된 문자에서 중성이 없습니다.");
         }
 
-        if (isJungsung(c)) {
+        if (isMiddleVowel(c)) {
             return c;
         } else {
-            return JUNGSUNG[((c - COMPLETE_TYPE_START) / JONGSUNG.length) % JUNGSUNG.length];
+            return MIDDLE_VOWELS[((c - COMPLETE_TYPE_START) / LAST_CONSONANTS.length) % MIDDLE_VOWELS.length];
         }
     }
 
@@ -146,15 +146,15 @@ public class HangulUtils {
      * @return 종성
      * @throws IllegalArgumentException 문자가 종성 혹은 완성형 문자가 아닐 경우
      */
-    public static char getJongsung(char c) {
-        if (!isJongsung(c) && !isCompleteType(c)) {
+    public static char getLastConsonant(char c) {
+        if (!isLastConsonant(c) && !isCompleteType(c)) {
             throw new IllegalArgumentException("입력된 문자에 종성을 가져올 수 없습니다.");
         }
 
-        if (isJongsung(c)) {
+        if (isLastConsonant(c)) {
             return c;
         } else {
-            return JONGSUNG[(c - COMPLETE_TYPE_START) % JONGSUNG.length];
+            return LAST_CONSONANTS[(c - COMPLETE_TYPE_START) % LAST_CONSONANTS.length];
         }
     }
 }

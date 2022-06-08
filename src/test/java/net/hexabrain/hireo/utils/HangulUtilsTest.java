@@ -1,23 +1,17 @@
 package net.hexabrain.hireo.utils;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class HangulUtilsTest {
 
     /* == 초중종성 여부 검사 테스트 == */
     @ParameterizedTest
-    @MethodSource({"provideChosungs", "provideJungsungs", "provideDoubleFinalConsonants", "provideCompleteHangul"})
+    @MethodSource({"provideFirstConsonants", "provideMiddleVowels", "provideDoubleFinalConsonants", "provideCompleteHangul"})
     @DisplayName("한글인 경우 참을 반환함")
     void isHangul(final char input) {
         assertThat(HangulUtils.isHangul(input)).isTrue();
@@ -31,48 +25,48 @@ class HangulUtilsTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideChosungs")
+    @MethodSource("provideFirstConsonants")
     @DisplayName("초성인 경우 참을 반환함")
-    void isChosung(final char input) {
-        assertThat(HangulUtils.isChosung(input)).isTrue();
+    void isFirstConsonant(final char input) {
+        assertThat(HangulUtils.isFirstConsonant(input)).isTrue();
     }
 
     @ParameterizedTest
-    @MethodSource({ "provideDoubleFinalConsonants", "provideJungsungs", "provideCompleteHangul",
+    @MethodSource({ "provideDoubleFinalConsonants", "provideMiddleVowels", "provideCompleteHangul",
                     "provideAlphabet", "provideNumbers", "provideSpecialChars" } )
     @DisplayName("초성이 아닌 경우 거짓을 반환함")
-    void isNotChosung(final char input) {
-        assertThat(HangulUtils.isChosung(input)).isFalse();
+    void isNotFirstConsonant(final char input) {
+        assertThat(HangulUtils.isFirstConsonant(input)).isFalse();
     }
 
     @ParameterizedTest
-    @MethodSource("provideJungsungs")
+    @MethodSource("provideMiddleVowels")
     @DisplayName("중성인 경우 참을 반환함")
-    void isJungsung(final char input) {
-        assertThat(HangulUtils.isJungsung(input)).isTrue();
+    void isMiddleVowel(final char input) {
+        assertThat(HangulUtils.isMiddleVowel(input)).isTrue();
     }
 
     @ParameterizedTest
-    @MethodSource({ "provideDoubleFinalConsonants", "provideChosungs", "provideCompleteHangul",
+    @MethodSource({ "provideDoubleFinalConsonants", "provideFirstConsonants", "provideCompleteHangul",
                     "provideAlphabet", "provideNumbers", "provideSpecialChars" } )
     @DisplayName("중성이 아닌 경우 거짓을 반환함")
-    void isNotJungsung(final char input) {
-        assertThat(HangulUtils.isJungsung(input)).isFalse();
+    void isNotMiddleVowel(final char input) {
+        assertThat(HangulUtils.isMiddleVowel(input)).isFalse();
     }
 
     @ParameterizedTest
-    @MethodSource({"provideDoubleFinalConsonants", "provideChosungs"})
+    @MethodSource({"provideDoubleFinalConsonants", "provideFirstConsonants"})
     @DisplayName("종성인 경우 참을 반환함")
-    void isJongsung(final char input) {
-        assertThat(HangulUtils.isJongsung(input)).isTrue();
+    void isLastConsonant(final char input) {
+        assertThat(HangulUtils.isLastConsonant(input)).isTrue();
     }
 
     @ParameterizedTest
-    @MethodSource({ "provideJungsungs", "provideCompleteHangul",
+    @MethodSource({"provideMiddleVowels", "provideCompleteHangul",
                     "provideAlphabet", "provideNumbers", "provideSpecialChars" } )
     @DisplayName("종성이 아닌 경우 거짓을 반환함")
-    void isNotJongsung(final char input) {
-        assertThat(HangulUtils.isJongsung(input)).isFalse();
+    void isNotLastConsonant(final char input) {
+        assertThat(HangulUtils.isLastConsonant(input)).isFalse();
     }
 
     @ParameterizedTest
@@ -83,7 +77,7 @@ class HangulUtilsTest {
     }
 
     @ParameterizedTest
-    @MethodSource({ "provideChosungs", "provideJungsungs", "provideCompleteHangul",
+    @MethodSource({"provideFirstConsonants", "provideMiddleVowels", "provideCompleteHangul",
                     "provideAlphabet", "provideNumbers", "provideSpecialChars" } )
     @DisplayName("받침이 아닌 경우 거짓을 반환함")
     void isNotDoubleFinalConsonant(final char input) {
@@ -98,7 +92,7 @@ class HangulUtilsTest {
     }
 
     @ParameterizedTest
-    @MethodSource({ "provideChosungs", "provideJungsungs", "provideDoubleFinalConsonants",
+    @MethodSource({"provideFirstConsonants", "provideMiddleVowels", "provideDoubleFinalConsonants",
                     "provideAlphabet", "provideNumbers", "provideSpecialChars" } )
     @DisplayName("완성형 한글이 아닌 경우 거짓을 반환함")
     void isNotCompleteHangul(final char input) {
@@ -109,30 +103,30 @@ class HangulUtilsTest {
     @ParameterizedTest
     @CsvSource({"가,ㄱ", "나,ㄴ", "다,ㄷ", "라,ㄹ", "빠,ㅃ", "싸,ㅆ", "짜,ㅉ", "깎,ㄲ", "낚,ㄴ", "닦,ㄷ"})
     @DisplayName("초성 추출 검사")
-    void extractChosung(final char input, final char expected) {
-        assertThat(HangulUtils.getChosung(input)).isEqualTo(expected);
+    void extractFirstConsonant(final char input, final char expected) {
+        assertThat(HangulUtils.getFirstConsonant(input)).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @CsvSource({"가,ㅏ", "냐,ㅑ", "디,ㅣ", "로,ㅗ", "류,ㅠ", "쓖,ㅠ", "삡,ㅣ", "뢔,ㅙ"})
     @DisplayName("중성 추출 검사")
-    void extractJungsung(final char input, final char expected) {
-        assertThat(HangulUtils.getJungsung(input)).isEqualTo(expected);
+    void extractMiddleVowel(final char input, final char expected) {
+        assertThat(HangulUtils.getMiddleVowel(input)).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @CsvSource({"가,' '", "각,ㄱ", "낙,ㄱ", "달,ㄹ", "맘,ㅁ", "빫,ㄼ", "쌂,ㄻ"})
     @DisplayName("종성 추출 검사")
-    void extractJongsung(final char input, final char expected) {
-        assertThat(HangulUtils.getJongsung(input)).isEqualTo(expected);
+    void extractLastConsonant(final char input, final char expected) {
+        assertThat(HangulUtils.getLastConsonant(input)).isEqualTo(expected);
     }
 
     /* == 테스트 픽스처 == */
-    private static char[] provideChosungs() {
+    private static char[] provideFirstConsonants() {
         return new char[]{'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'};
     }
 
-    private static char[] provideJungsungs() {
+    private static char[] provideMiddleVowels() {
         return new char[]{'ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'};
     }
 
