@@ -1,117 +1,188 @@
 package net.hexabrain.hireo.api.v1.bookmark;
 
-import net.hexabrain.hireo.api.v1.bookmark.BookmarkApiController;
 import net.hexabrain.hireo.web.bookmark.service.BookmarkService;
-import net.hexabrain.hireo.web.company.service.CompanyService;
+import net.hexabrain.hireo.web.common.exception.bookmark.AlreadyBookmarkedException;
+import net.hexabrain.hireo.web.common.exception.company.BookmarkNotFoundException;
+import net.hexabrain.hireo.web.common.exception.company.CompanyNotFoundException;
+import net.hexabrain.hireo.web.common.exception.company.JobNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@WithMockUser(username = "test")
 class BookmarkApiControllerTest {
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private BookmarkService bookmarkService;
 
-    @Mock
-    private CompanyService companyService;
-
-    @InjectMocks
-    private BookmarkApiController controller;
-
     @Test
-    @DisplayName("새 북마크 추가")
-    void addNewBookmark() {
+    @DisplayName("회사에 새 북마크 추가")
+    void addBookmarkToCompany() throws Exception {
         Long companyId = 1L;
 
-        when(companyService.isExist(companyId)).thenReturn(true);
-        when(bookmarkService.isExist(companyId)).thenReturn(false);
+        when(bookmarkService.addToCompany(any(), eq(companyId))).thenReturn(companyId);
 
-        ResponseEntity<Object> response = controller.addBookmark(1L);
+        mockMvc.perform(post(String.format("/api/v1/companies/%d/bookmarks", companyId)))
+                .andExpect(status().isCreated());
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        verify(bookmarkService).post(companyId);
+        verify(bookmarkService).addToCompany(any(), eq(companyId));
     }
 
     @Test
     @DisplayName("이미 북마크된 회사 추가 시 에러")
-    void addExistingBookmark() {
+    void addBookmarkToCompany_alreadyBookmarked() throws Exception {
         Long companyId = 1L;
 
-        when(companyService.isExist(companyId)).thenReturn(true);
-        when(bookmarkService.isExist(companyId)).thenReturn(true);
+        when(bookmarkService.addToCompany(any(), eq(companyId))).thenThrow(new AlreadyBookmarkedException());
 
-        ResponseEntity<Object> response = controller.addBookmark(1L);
+        mockMvc.perform(post(String.format("/api/v1/companies/%d/bookmarks", companyId)))
+                        .andExpect(status().isBadRequest());
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-
-        verify(bookmarkService, never()).post(companyId);
+        verify(bookmarkService).addToCompany(any(), eq(companyId));
     }
 
     @Test
     @DisplayName("존재하지 않는 회사에 북마크 추가 시 에러")
-    void addNonExistingBookmark() {
+    void addBookmarkToCompany_notFound() throws Exception {
         Long companyId = 1L;
 
-        when(companyService.isExist(companyId)).thenReturn(false);
+        when(bookmarkService.addToCompany(any(), eq(companyId))).thenThrow(new BookmarkNotFoundException());
 
-        ResponseEntity<Object> response = controller.addBookmark(1L);
+        mockMvc.perform(post(String.format("/api/v1/companies/%d/bookmarks", companyId)))
+                        .andExpect(status().isNotFound());
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-        verify(bookmarkService, never()).post(companyId);
+        verify(bookmarkService).addToCompany(any(), eq(companyId));
     }
 
     @Test
-    @DisplayName("기존 북마크 삭제")
-    void deleteBookmark() {
+    @DisplayName("구직에 새 북마크 추가")
+    void addBookmarkToJob() throws Exception {
+        Long jobId = 1L;
+
+        when(bookmarkService.addToJob(any(), eq(jobId))).thenReturn(jobId);
+
+        mockMvc.perform(post(String.format("/api/v1/jobs/%d/bookmarks", jobId)))
+                .andExpect(status().isCreated());
+
+        verify(bookmarkService).addToJob(any(), eq(jobId));
+    }
+
+    @Test
+    @DisplayName("이미 북마크된 구직 추가 시 에러")
+    void addBookmarkToJob_alreadyBookmarked() throws Exception {
+        Long jobId = 1L;
+
+        when(bookmarkService.addToJob(any(), eq(jobId))).thenThrow(new AlreadyBookmarkedException());
+
+        mockMvc.perform(post(String.format("/api/v1/jobs/%d/bookmarks", jobId)))
+                        .andExpect(status().isBadRequest());
+
+        verify(bookmarkService).addToJob(any(), eq(jobId));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 구직에 북마크 추가 시 에러")
+    void addBookmarkToJob_notFound() throws Exception {
+        Long jobId = 1L;
+
+        when(bookmarkService.addToJob(any(), eq(jobId))).thenThrow(new BookmarkNotFoundException());
+
+        mockMvc.perform(post(String.format("/api/v1/jobs/%d/bookmarks", jobId)))
+                        .andExpect(status().isNotFound());
+
+        verify(bookmarkService).addToJob(any(), eq(jobId));
+    }
+
+    @Test
+    @DisplayName("회사 기존 북마크 삭제")
+    void deleteBookmarkFromCompany() throws Exception {
         Long companyId = 1L;
 
-        when(companyService.isExist(companyId)).thenReturn(true);
-        when(bookmarkService.isExist(companyId)).thenReturn(true);
+        doNothing().when(bookmarkService).deleteOnCompany(any(), eq(companyId));
 
-        ResponseEntity<Object> response = controller.deleteBookmark(1L);
+        mockMvc.perform(delete(String.format("/api/v1/companies/%d/bookmarks", companyId)))
+                .andExpect(status().isNoContent());
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        verify(bookmarkService).deleteOnCompany(any(), eq(companyId));
+    }
 
-        verify(bookmarkService).delete(companyId);
+    @Test
+    @DisplayName("구직 기존 북마크 삭제")
+    void deleteBookmarkFromJob() throws Exception {
+        Long jobId = 1L;
+
+        doNothing().when(bookmarkService).deleteOnJob(any(), eq(jobId));
+
+        mockMvc.perform(delete(String.format("/api/v1/jobs/%d/bookmarks", jobId)))
+                .andExpect(status().isNoContent());
+
+        verify(bookmarkService).deleteOnJob(any(), eq(jobId));
     }
 
     @Test
     @DisplayName("북마크되지 않은 회사에 북마크 삭제 시 에러")
-    void deleteNonExistingBookmark() {
+    void deleteBookmarkFromCompany_notBookmarked() throws Exception {
         Long companyId = 1L;
 
-        when(companyService.isExist(companyId)).thenReturn(true);
-        when(bookmarkService.isExist(companyId)).thenReturn(false);
+        doThrow(new BookmarkNotFoundException()).when(bookmarkService).deleteOnCompany(any(), eq(companyId));
 
-        ResponseEntity<Object> response = controller.deleteBookmark(1L);
+        mockMvc.perform(delete(String.format("/api/v1/companies/%d/bookmarks", companyId)))
+                        .andExpect(status().isNotFound());
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
-        verify(bookmarkService, never()).delete(companyId);
+        verify(bookmarkService).deleteOnCompany(any(), eq(companyId));
     }
 
     @Test
     @DisplayName("존재하지 않는 회사에 북마크 삭제 시 에러")
-    void deleteNonExistingBookmarkWhenCompanyNotExist() {
+    void deleteBookmarkFromCompany_notFound() throws Exception {
         Long companyId = 1L;
 
-        when(companyService.isExist(companyId)).thenReturn(false);
+        doThrow(new CompanyNotFoundException()).when(bookmarkService).deleteOnCompany(any(), eq(companyId));
 
-        ResponseEntity<Object> response = controller.deleteBookmark(1L);
+        mockMvc.perform(delete(String.format("/api/v1/companies/%d/bookmarks", companyId)))
+                .andExpect(status().isNotFound());
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        verify(bookmarkService).deleteOnCompany(any(), eq(companyId));
+    }
 
-        verify(bookmarkService, never()).delete(companyId);
+    @Test
+    @DisplayName("북마크되지 않은 구직에 북마크 삭제 시 에러")
+    void deleteBookmarkFromJob_notBookmarked() throws Exception {
+        Long jobId = 1L;
+
+        doThrow(new BookmarkNotFoundException()).when(bookmarkService).deleteOnJob(any(), eq(jobId));
+
+        mockMvc.perform(delete(String.format("/api/v1/jobs/%d/bookmarks", jobId)))
+                        .andExpect(status().isNotFound());
+
+        verify(bookmarkService).deleteOnJob(any(), eq(jobId));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 구직에 북마크 삭제 시 에러")
+    void deleteBookmarkFromJob_notFound() throws Exception {
+        Long jobId = 1L;
+
+        doThrow(new JobNotFoundException()).when(bookmarkService).deleteOnJob(any(), eq(jobId));
+
+        mockMvc.perform(delete(String.format("/api/v1/jobs/%d/bookmarks", jobId)))
+                .andExpect(status().isNotFound());
+
+        verify(bookmarkService).deleteOnJob(any(), eq(jobId));
     }
 
 }
