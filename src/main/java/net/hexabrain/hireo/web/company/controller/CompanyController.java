@@ -2,12 +2,10 @@ package net.hexabrain.hireo.web.company.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.company.domain.Company;
 import net.hexabrain.hireo.web.account.service.AccountService;
 import net.hexabrain.hireo.web.company.service.CompanyService;
 import net.hexabrain.hireo.utils.HangulUtils;
-import net.hexabrain.hireo.web.review.service.ReviewService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,36 +15,33 @@ import org.thymeleaf.util.StringUtils;
 
 @Slf4j
 @Controller
-@RequestMapping("/company")
+@RequestMapping("/companies")
 @RequiredArgsConstructor
-public class CompanyProfileController {
+public class CompanyController {
     private final CompanyService companyService;
-    private final ReviewService reviewService;
     private final AccountService accountService;
 
     @GetMapping("/{id}")
     public String profile(@PathVariable("id") Long id, Model model) {
-        if (companyService.isExist(id)) {
-            Company foundCompany = companyService.findOne(id);
-            model.addAttribute("company", foundCompany);
-            model.addAttribute("reviews", foundCompany.getReviews());
-
-            Account currentAccount = accountService.getCurrentAccount();
-            model.addAttribute("account", currentAccount);
-
-            return "company/profile";
-        } else {
+        if (!companyService.isExist(id)) {
             return "redirect:/error/404";
         }
+
+        Company foundCompany = companyService.findOne(id);
+        model.addAttribute("company", foundCompany);
+        model.addAttribute("reviews", foundCompany.getReviews());
+        model.addAttribute("account", accountService.getCurrentAccount());
+        return "company/profile";
     }
 
-    @GetMapping("/list")
-    public String list(String category) {
-        if (StringUtils.isEmptyOrWhitespace(category) || !HangulUtils.isChosung(category.charAt(0))) {
+    @GetMapping("/list/{category}")
+    public String list(@PathVariable String category, Model model) {
+        if (StringUtils.isEmptyOrWhitespace(category) || !HangulUtils.isHangul(category.charAt(0))) {
             category = "ㄱ";
         }
 
-
+        char firstConsonant = HangulUtils.getFirstConsonant(category.charAt(0));
+        model.addAttribute("companies", companyService.list(firstConsonant));
         return "company/list";
     }
 }

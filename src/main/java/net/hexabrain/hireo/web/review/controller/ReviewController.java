@@ -20,15 +20,15 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final ReviewMapper reviewMapper;
 
-    @PostMapping("/company/review/{id}")
+    @PostMapping("/companies/review/{id}")
     public String review(@PathVariable("id") Long id,
                          @Valid @ModelAttribute("review") ReviewDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult has errors: {}", bindingResult);
-            return "redirect:/company/{id}";
+            return "redirect:/companies/{id}";
         }
 
         reviewService.post(id, reviewMapper.toEntity(dto));
-        return "redirect:/company/{id}";
+        return "redirect:/companies/{id}";
     }
 }

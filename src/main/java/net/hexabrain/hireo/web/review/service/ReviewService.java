@@ -30,7 +30,7 @@ public class ReviewService {
 
         if (company.isPresent()) {
             UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Account account = accountRepository.findByEmail(user.getUsername());
+            Account account = accountRepository.findByEmailOrThrow(user.getUsername());
 
             review.setAuthor(account);
             review.setCompany(company.get());

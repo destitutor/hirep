@@ -45,15 +45,13 @@ public class WebSecurityConfig {
     @Order(1)
     @Bean
     public SecurityFilterChain restApiSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.httpBasic().disable();
-        http.formLogin().disable();
-
         http
+                .antMatcher("/api/**")
                 .authorizeHttpRequests(authz -> authz
                         .antMatchers("/api/authenticate").permitAll()
                         .antMatchers("/api/**").authenticated()
                 )
+                .csrf().disable()
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                     .authenticationEntryPoint(authenticationErrorHandler)
@@ -82,16 +80,16 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin()
-                .loginPage("/accounts/login")
-                .usernameParameter("email")
-                .defaultSuccessUrl("/", true)
-                .and()
+                    .loginPage("/accounts/login")
+                    .usernameParameter("email")
+                    .defaultSuccessUrl("/", true)
+                    .and()
                 .logout()
-                .logoutUrl("/accounts/logout")
-                .logoutSuccessUrl("/")
-                .and()
+                    .logoutUrl("/accounts/logout")
+                    .logoutSuccessUrl("/")
+                    .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+                    .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
         return http.build();
     }
 

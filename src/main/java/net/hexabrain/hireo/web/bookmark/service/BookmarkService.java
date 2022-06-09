@@ -5,10 +5,12 @@ import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.repository.AccountRepository;
 import net.hexabrain.hireo.web.bookmark.domain.Bookmark;
 import net.hexabrain.hireo.web.bookmark.repository.BookmarkRepository;
+import net.hexabrain.hireo.web.common.exception.bookmark.AlreadyBookmarkedException;
 import net.hexabrain.hireo.web.company.domain.Company;
 import net.hexabrain.hireo.web.company.repository.CompanyRepository;
 import net.hexabrain.hireo.web.job.domain.Job;
 import net.hexabrain.hireo.web.job.repository.JobRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,14 +28,22 @@ public class BookmarkService {
         Company company = companyRepository.findByIdOrThrow(companyId);
         Account loggedInUser = accountRepository.findByEmailOrThrow(user.getUsername());
         Bookmark bookmark = new Bookmark(loggedInUser, company);
-        return bookmarkRepository.save(bookmark).getId();
+        try {
+            return bookmarkRepository.save(bookmark).getId();
+        } catch (DataIntegrityViolationException ex) {
+            throw new AlreadyBookmarkedException();
+        }
     }
 
     public Long addToJob(User user, Long jobId) {
         Job job = jobRepository.findByIdOrThrow(jobId);
         Account loggedInUser = accountRepository.findByEmailOrThrow(user.getUsername());
         Bookmark bookmark = new Bookmark(loggedInUser, job);
-        return bookmarkRepository.save(bookmark).getId();
+        try {
+            return bookmarkRepository.save(bookmark).getId();
+        } catch (DataIntegrityViolationException ex) {
+            throw new AlreadyBookmarkedException();
+        }
     }
 
     public void deleteOnJob(User user, Long jobId) {
