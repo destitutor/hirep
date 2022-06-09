@@ -121,6 +121,13 @@ class HangulUtilsTest {
         assertThat(HangulUtils.getLastConsonant(input)).isEqualTo(expected);
     }
 
+    @ParameterizedTest
+    @CsvSource({"ㄱ,가", "ㄴ,나", "ㄷ,다", "ㄹ,라", "ㅂ,바", "ㅆ,싸", "ㅉ,짜", "ㄲ,까", "ㅎ,하"})
+    @DisplayName("초성을 완성형 시작 문자로 변환")
+    void convertFirstConsonantToCompleteHangul(final char input, final char expected) {
+        assertThat(HangulUtils.getCompleteStartLetterFrom(input)).isEqualTo(expected);
+    }
+
     /* == 테스트 픽스처 == */
     private static char[] provideFirstConsonants() {
         return new char[]{'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'};
