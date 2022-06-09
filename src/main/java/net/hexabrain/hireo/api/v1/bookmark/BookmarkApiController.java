@@ -2,43 +2,50 @@ package net.hexabrain.hireo.api.v1.bookmark;
 
 import lombok.RequiredArgsConstructor;
 import net.hexabrain.hireo.web.bookmark.service.BookmarkService;
-import net.hexabrain.hireo.web.company.service.CompanyService;
-import org.springframework.http.HttpStatus;
+import net.hexabrain.hireo.web.common.security.CurrentUser;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
-@RequestMapping("/api/v1/bookmark")
+@RequestMapping("/api/v1/")
 @RequiredArgsConstructor
 public class BookmarkApiController {
     private final BookmarkService bookmarkService;
-    private final CompanyService companyService;
 
-    @PostMapping("/company/{id}")
-    public ResponseEntity<Object> addBookmark(@PathVariable("id") Long id) {
-        if (!companyService.isExist(id)) {
-            return new ResponseEntity<>(String.format("Company with id %d does not exist", id), HttpStatus.NOT_FOUND);
-        }
-
-        if (!bookmarkService.isExist(id)) {
-            Long bookmarkId = bookmarkService.post(id);
-            return new ResponseEntity<>(String.format("Bookmark with id %d has been added", bookmarkId), HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(String.format("Company id %d is already bookmarked", id), HttpStatus.CONFLICT);
-        }
+    @PostMapping("/companies/{id}/bookmarks")
+    public ResponseEntity<Void> addBookmarkToCompany(
+            @CurrentUser User user,
+            @PathVariable("id") Long companyId) {
+        Long bookmarkId = bookmarkService.addToCompany(user, companyId);
+        return ResponseEntity.created(URI.create("/api/v1/companies/" + companyId + "/bookmarks/" + bookmarkId)).build();
     }
 
-    @DeleteMapping("/company/{id}")
-    public ResponseEntity<Object> deleteBookmark(@PathVariable("id") Long id) {
-        if (!companyService.isExist(id)) {
-            return new ResponseEntity<>(String.format("Company id %d does not exist", id), HttpStatus.NOT_FOUND);
-        }
+    @PostMapping("/jobs/{id}/bookmarks")
+    public ResponseEntity<Void> addBookmarkToJob(
+            @CurrentUser User user,
+            @PathVariable("id") Long jobId) {
+        Long bookmarkId = bookmarkService.addToJob(user, jobId);
+        return ResponseEntity.created(URI.create("/api/v1/jobs/" + jobId + "/bookmarks/" + bookmarkId)).build();
+    }
 
-        if (bookmarkService.isExist(id)) {
-            bookmarkService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(String.format("Company id %d is not bookmarked", id), HttpStatus.BAD_REQUEST);
-        }
+    @DeleteMapping("/companies/{id}/bookmarks")
+    public ResponseEntity<Object> deleteBookmarkOnCompany(
+            @CurrentUser User user,
+            @PathVariable("id") Long companyId
+    ) {
+        bookmarkService.deleteOnCompany(user, companyId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/jobs/{id}/bookmarks")
+    public ResponseEntity<Object> deleteBookmarkOnJob(
+            @CurrentUser User user,
+            @PathVariable("id") Long companyId
+    ) {
+        bookmarkService.deleteOnJob(user, companyId);
+        return ResponseEntity.noContent().build();
     }
 }
