@@ -26,8 +26,15 @@ public class HangulUtils {
     private static final char[] LAST_CONSONANTS = {
             ' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
     };
+    private static final char[] DOUBLE_CONSONANTS = {
+            'ㄲ', 'ㄸ', 'ㅃ', 'ㅆ', 'ㅉ'
+    };
     private static final char[] DOUBLE_FINAL_CONSONANTS = {
             'ㄳ', 'ㄵ', 'ㄶ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅄ'
+    };
+    /* 문자를 초성으로 매핑하기 위한 배열. 겹받침(ㄲ, ㄸ 등) 때문에 제대로 인덱스를 찾지 못하는 경우를 방지한다. */
+    private static final int[] FIRST_CONSONANT_MAP = {
+            0, 1, -1, 2, -1, -1, 3, 4, 5, -1, -1, -1, -1, -1, -1, -1, 6, 7, 8, -1, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
     };
 
     private HangulUtils() { }
@@ -66,6 +73,20 @@ public class HangulUtils {
      */
     public static boolean isLastConsonant(char c) {
         return (c >= LAST_CONSONANT_START && c <= LAST_CONSONANT_END);
+    }
+
+    /**
+     * 입력된 문자가 쌍자음인지 확인한다.
+     * @param c 문자
+     * @return 쌍자음이면 true, 아니면 false
+     */
+    public static boolean isDoubleConsonant(char c) {
+        for (char doubleConsonant : DOUBLE_CONSONANTS) {
+            if (c == doubleConsonant) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** 입력된 문자가 겹받침인지 확인한다.
@@ -156,5 +177,51 @@ public class HangulUtils {
         } else {
             return LAST_CONSONANTS[(c - COMPLETE_TYPE_START) % LAST_CONSONANTS.length];
         }
+    }
+
+    /**
+     * 입력된 초성과 중성, 종성을 조합하여 한글 문자를 생성한다.
+     * @param firstIndex 초성 인덱스
+     * @param middleIndex 중성 인덱스
+     * @param lastIndex 종성 인덱스
+     * @return 한글 문자
+     */
+    private static char combine(int firstIndex, int middleIndex, int lastIndex) {
+        return (char)(((firstIndex * MIDDLE_VOWELS.length) + middleIndex)
+                * LAST_CONSONANTS.length + lastIndex + COMPLETE_TYPE_START);
+    }
+
+    /**
+     * 입력된 초성에서 완성형 시작 문자를 가져온다.
+     * 예를 들어서, 입력된 초성이 'ㄱ'이면 '가'를, 'ㄴ'이면 '나'를, 'ㄷ'이면 '다'를 반환한다.
+     * @param firstConsonant 초성
+     * @return 완성형 시작 문자
+     * @throws IllegalArgumentException 입력된 문자가 초성이 아닐 경우
+     */
+    public static char getCompleteStartLetterFrom(char firstConsonant) {
+        if (!isFirstConsonant(firstConsonant)) {
+            throw new IllegalArgumentException("입력된 문자가 초성이 아닙니다.");
+        }
+
+        int firstConsonantIndex = FIRST_CONSONANT_MAP[firstConsonant - LAST_CONSONANT_START];
+        int middleVowelIndex = 0;
+        int lastConsonantIndex = 0;
+        return combine(firstConsonantIndex, middleVowelIndex, lastConsonantIndex);
+    }
+
+    /**
+     * 입력된 초성에서 완성형 마지막 문자를 가져온다.
+     * @param firstConsonant 초성
+     * @return 완성형 마지막 문자
+     */
+    public static char getCompleteEndLetterFrom(char firstConsonant) {
+        if (!isFirstConsonant(firstConsonant)) {
+            throw new IllegalArgumentException("입력된 문자가 초성이 아닙니다.");
+        }
+
+        int firstConsonantIndex = FIRST_CONSONANT_MAP[firstConsonant - LAST_CONSONANT_START];
+        int middleVowelIndex = MIDDLE_VOWELS.length - 1;
+        int lastConsonantIndex = LAST_CONSONANTS.length - 1;
+        return combine(firstConsonantIndex, middleVowelIndex, lastConsonantIndex);
     }
 }
