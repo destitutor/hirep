@@ -36,12 +36,6 @@ public class JwtTokenProvider implements InitializingBean {
         this.base64Secret = base64Secret;
         this.expirationTime = expirationTime;
     }
-    /**
-     * 사용자가 인증에 성공하면 토큰을 발급한다. 주어진 클레임과 주체(토큰에서 사용자에 대한 식별값)를
-     * 가지고 토큰을 만든다.
-     * @param authentication 인증 정보
-     * @return 토큰
-     */
     public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -71,11 +65,6 @@ public class JwtTokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    /**
-     * 토큰이 유효한지 검증한다.
-     * @param token 토큰
-     * @return 유효하면 true, 아니면 false
-     */
     public boolean validateToken(String token) {
         try {
             getAllClaimsFromToken(token);
@@ -86,11 +75,6 @@ public class JwtTokenProvider implements InitializingBean {
         }
     }
 
-    /**
-     * 토큰에서 모든 클레임(claims)을 가져온다.
-     * @param token 토큰
-     * @return 클레임
-     */
     private Jws<Claims> getAllClaimsFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
