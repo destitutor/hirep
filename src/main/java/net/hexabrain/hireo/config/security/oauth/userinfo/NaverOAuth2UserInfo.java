@@ -10,7 +10,7 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public OAuth2Provider  getProvider() {
+    public OAuth2Provider getProvider() {
         return OAuth2Provider.NAVER;
     }
 
@@ -26,8 +26,8 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public void initProperties() {
-        Map<String, Object> kakaoAccount = uncheckedCast(attributes.get("naver_account"));
-        email = kakaoAccount.get("email").toString();
-        name = kakaoAccount.get("name").toString();
+        Map<String, Object> naverAccount = uncheckedCast(attributes.get("response"));
+        email = naverAccount.get("email").toString();
+        name = naverAccount.get("name").toString();
     }
 }

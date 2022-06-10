@@ -28,6 +28,8 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     public void initProperties() {
         Map<String, Object> kakaoAccount = uncheckedCast(attributes.get("kakao_account"));
         email = kakaoAccount.get("email").toString();
-        name = kakaoAccount.get("name").toString();
+
+        Map<String, Object> profile = uncheckedCast(kakaoAccount.get("profile"));
+        name = profile.get("nickname").toString();
     }
 }
