@@ -4,13 +4,13 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 
-public abstract class OAuth2UserInfo {
+public abstract class CustomOAuth2UserInfo {
     protected final Map<String, Object> attributes;
 
     protected String email;
     protected String name;
 
-    protected OAuth2UserInfo(Map<String, Object> attributes) {
+    protected CustomOAuth2UserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
         initProperties();
     }
@@ -26,7 +26,7 @@ public abstract class OAuth2UserInfo {
      * @return 프로바이더 (null이 아님)
      */
     @Contract("->!null")
-    public abstract OAuth2Provider getProvider();
+    public abstract CustomOAuth2Provider getProvider();
 
     /**
      * 인증 정보에서 이메일을 반환합니다.
@@ -57,10 +57,10 @@ public abstract class OAuth2UserInfo {
      * @param attributes 인증 정보
      * @return 인증 정보
      */
-    public static OAuth2UserInfo of(String registrationId, Map<String, Object> attributes) {
-        if (OAuth2Provider.KAKAO.equalsWith(registrationId)) {
+    public static CustomOAuth2UserInfo of(String registrationId, Map<String, Object> attributes) {
+        if (CustomOAuth2Provider.KAKAO.equalsWith(registrationId)) {
             return new KakaoOAuth2UserInfo(attributes);
-        } else if (OAuth2Provider.NAVER.equalsWith(registrationId)) {
+        } else if (CustomOAuth2Provider.NAVER.equalsWith(registrationId)) {
             return new NaverOAuth2UserInfo(attributes);
         } else {
             throw new IllegalArgumentException(String.format("프로바이더 [%s]는 지원하지 않습니다.", registrationId));

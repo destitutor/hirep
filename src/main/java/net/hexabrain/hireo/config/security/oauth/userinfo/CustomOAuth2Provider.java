@@ -1,12 +1,12 @@
 package net.hexabrain.hireo.config.security.oauth.userinfo;
 
-public enum OAuth2Provider {
+public enum CustomOAuth2Provider {
     KAKAO("kakao"),
     NAVER("naver");
 
     private final String provider;
 
-    OAuth2Provider(String provider) {
+    CustomOAuth2Provider(String provider) {
         this.provider = provider;
     }
 

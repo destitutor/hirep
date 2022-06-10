@@ -2,11 +2,12 @@ package net.hexabrain.hireo.config.security.oauth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.hexabrain.hireo.config.security.oauth.userinfo.OAuth2UserInfo;
+import net.hexabrain.hireo.config.security.oauth.userinfo.CustomOAuth2UserInfo;
 import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.domain.AccountType;
 import net.hexabrain.hireo.web.account.domain.Freelancer;
 import net.hexabrain.hireo.web.account.repository.AccountRepository;
+import net.hexabrain.hireo.web.company.domain.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -29,7 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User user = super.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2UserInfo userInfo = OAuth2UserInfo.of(registrationId, user.getAttributes());
+        CustomOAuth2UserInfo userInfo = CustomOAuth2UserInfo.of(registrationId, user.getAttributes());
 
         Optional<Account> foundAccount = accountRepository.findByEmail(userInfo.getEmail());
         if (foundAccount.isEmpty()) {
@@ -37,12 +38,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .email(userInfo.getEmail())
                     .password(createDummyPassword())
                     .type(AccountType.FREELANCER)
+                    .profile(new Profile(userInfo.getName()))
                     .build();
             account.encodePassword(passwordEncoder);
             accountRepository.save(account);
-            return new OAuth2UserPrincipal(account, userInfo);
+            return new CustomOAuth2UserPrincipal(account, userInfo);
         }
-        return new OAuth2UserPrincipal(foundAccount.get(), userInfo);
+        return new CustomOAuth2UserPrincipal(foundAccount.get(), userInfo);
     }
 
     private String createDummyPassword() {

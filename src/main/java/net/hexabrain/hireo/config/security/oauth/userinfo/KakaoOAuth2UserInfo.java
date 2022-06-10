@@ -4,14 +4,14 @@ import java.util.Map;
 
 import static net.hexabrain.hireo.utils.ConvertUtils.uncheckedCast;
 
-public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
+public class KakaoOAuth2UserInfo extends CustomOAuth2UserInfo {
     public KakaoOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
     }
 
     @Override
-    public OAuth2Provider getProvider() {
-        return OAuth2Provider.KAKAO;
+    public CustomOAuth2Provider getProvider() {
+        return CustomOAuth2Provider.KAKAO;
     }
 
     @Override
