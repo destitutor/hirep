@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class DateUtils {
-    protected DateUtils() { }
+    private DateUtils() {
+        throw new IllegalStateException("인스턴스화 할 수 없습니다.");
+    }
 
     public static String getElapsedDateTime(LocalDateTime past) {
         LocalDateTime now = LocalDateTime.now();
