@@ -21,9 +21,17 @@ public interface AccountMapper extends BaseMapper<AccountDto, Account> {
     @ObjectFactory
     default Account resolve(AccountDto dto) {
         if (dto.getType().equals(AccountType.EMPLOYER)) {
-            return new Employer(dto.getEmail(), dto.getPassword(), dto.getType());
+            return Employer.builder()
+                    .email(dto.getEmail())
+                    .password(dto.getPassword())
+                    .type(dto.getType())
+                    .build();
         } else if (dto.getType().equals(AccountType.FREELANCER)) {
-            return new Freelancer(dto.getEmail(), dto.getPassword(), dto.getType());
+            return Freelancer.builder()
+                    .email(dto.getEmail())
+                    .password(dto.getPassword())
+                    .type(dto.getType())
+                    .build();
         } else {
             throw new IllegalArgumentException("Invalid account type");
         }

@@ -18,7 +18,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Account {
+public abstract class Account extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "account_id")
     private Long id;
@@ -43,14 +43,10 @@ public abstract class Account {
     @OneToMany(mappedBy = "account")
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    protected Account(String email, String password, AccountType type) {
+    protected Account(String email, String password, AccountType type, Profile profile) {
         this.email = email;
         this.password = password;
         this.type = type;
-    }
-
-    protected Account(String email, String password, AccountType type, Profile profile) {
-        this(email, password, type);
         this.profile = profile;
     }
 

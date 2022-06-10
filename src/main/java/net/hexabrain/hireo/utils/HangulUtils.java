@@ -37,7 +37,9 @@ public class HangulUtils {
             0, 1, -1, 2, -1, -1, 3, 4, 5, -1, -1, -1, -1, -1, -1, -1, 6, 7, 8, -1, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
     };
 
-    private HangulUtils() { }
+    private HangulUtils() {
+        throw new IllegalStateException("인스턴스화 할 수 없습니다.");
+    }
 
     /**
      * 입력된 문자가 완성형 문자인지 확인한다.

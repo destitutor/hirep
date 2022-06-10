@@ -5,6 +5,7 @@ import net.hexabrain.hireo.config.security.jwt.JwtAccessDeniedHandler;
 import net.hexabrain.hireo.config.security.jwt.JwtAuthTokenFilter;
 import net.hexabrain.hireo.config.security.jwt.JwtAuthenticationEntryPoint;
 import net.hexabrain.hireo.config.security.jwt.JwtTokenProvider;
+import net.hexabrain.hireo.config.security.oauth.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -36,9 +37,10 @@ public class WebSecurityConfig {
     private final JwtAuthenticationEntryPoint authenticationErrorHandler;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final CorsFilter corsFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
@@ -57,10 +59,6 @@ public class WebSecurityConfig {
                     .authenticationEntryPoint(authenticationErrorHandler)
                     .accessDeniedHandler(jwtAccessDeniedHandler)
                     .and()
-                .headers()
-                    .frameOptions()
-                    .sameOrigin()
-                    .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
@@ -74,7 +72,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain loginFormFilterChain(final HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .antMatchers("/accounts/login", "/accounts/new", "/",
+                        .antMatchers("/accounts/**", "/accounts", "/",
                                 "/js/**", "/sass/**", "/images/**", "/fonts/**", "/css/**").permitAll()
                         .antMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -87,6 +85,18 @@ public class WebSecurityConfig {
                 .logout()
                     .logoutUrl("/accounts/logout")
                     .logoutSuccessUrl("/")
+                    .and()
+                .oauth2Login()
+                    .loginPage("/accounts/login")
+                    .userInfoEndpoint()
+                        .userService(customOAuth2UserService)
+                        .and()
+                    .authorizationEndpoint()
+                        .baseUri("/accounts/login/oauth2/authorize")
+                        .and()
+                    .redirectionEndpoint()
+                        .baseUri("/accounts/login/oauth2/code/{code}")
+                        .and()
                     .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);

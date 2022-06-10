@@ -36,8 +36,6 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
             Authentication authentication = tokenProvider.getAuthentication(resolvedToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Authenticated user: {}, uri: {}", authentication.getName(), request.getRequestURI());
-        } else {
-            log.info("Invalid JWT token, uri: {}", request.getRequestURI());
         }
 
         filterChain.doFilter(request, response);
