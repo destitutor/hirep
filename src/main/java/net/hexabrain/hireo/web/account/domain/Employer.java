@@ -2,6 +2,7 @@ package net.hexabrain.hireo.web.account.domain;
 
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.hexabrain.hireo.web.company.domain.Profile;
@@ -13,10 +14,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("EMP")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Employer extends Account {
-    public Employer(String email, String password, AccountType type) {
-        super(email, password, type);
-    }
-
+    @Builder
     public Employer(String email, String password, AccountType type, Profile profile) {
         super(email, password, type, profile);
     }
