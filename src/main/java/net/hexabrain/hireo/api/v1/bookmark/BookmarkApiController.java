@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/v1/")
 @RequiredArgsConstructor
 public class BookmarkApiController {
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/companies/{id}/bookmarks")
+    @PostMapping({"/api/v1/companies/{id}/bookmarks", "/companies/{id}/bookmarks"})
     public ResponseEntity<Void> addBookmarkToCompany(
             @CurrentUser User user,
             @PathVariable("id") Long companyId) {
@@ -23,7 +22,7 @@ public class BookmarkApiController {
         return ResponseEntity.created(URI.create("/api/v1/companies/" + companyId + "/bookmarks/" + bookmarkId)).build();
     }
 
-    @PostMapping("/jobs/{id}/bookmarks")
+    @PostMapping({"/api/v1/jobs/{id}/bookmarks", "/jobs/{id}/bookmarks"})
     public ResponseEntity<Void> addBookmarkToJob(
             @CurrentUser User user,
             @PathVariable("id") Long jobId) {
@@ -31,7 +30,7 @@ public class BookmarkApiController {
         return ResponseEntity.created(URI.create("/api/v1/jobs/" + jobId + "/bookmarks/" + bookmarkId)).build();
     }
 
-    @DeleteMapping("/companies/{id}/bookmarks")
+    @DeleteMapping({"/api/v1/companies/{id}/bookmarks", "/companies/{id}/bookmarks"})
     public ResponseEntity<Object> deleteBookmarkOnCompany(
             @CurrentUser User user,
             @PathVariable("id") Long companyId
@@ -40,12 +39,12 @@ public class BookmarkApiController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/jobs/{id}/bookmarks")
+    @DeleteMapping({"/api/v1/jobs/{id}/bookmarks", "/jobs/{id}/bookmarks"})
     public ResponseEntity<Object> deleteBookmarkOnJob(
             @CurrentUser User user,
-            @PathVariable("id") Long companyId
+            @PathVariable("id") Long jobId
     ) {
-        bookmarkService.deleteOnJob(user, companyId);
+        bookmarkService.deleteOnJob(user, jobId);
         return ResponseEntity.noContent().build();
     }
 }

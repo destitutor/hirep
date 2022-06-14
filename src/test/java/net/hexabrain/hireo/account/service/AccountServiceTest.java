@@ -32,7 +32,7 @@ class AccountServiceTest {
 
     @Test
     void save() {
-        Account expectedAccount = new Employer("test@test.com", "test1234", AccountType.EMPLOYER);
+        Account expectedAccount = new Employer("test@test.com", "test1234", AccountType.EMPLOYER, null);
 
         String encodedPassword = "encoded password";
         when(passwordEncoder.encode(expectedAccount.getPassword())).thenReturn(encodedPassword);

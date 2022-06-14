@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.domain.AccountType;
-import net.hexabrain.hireo.web.account.dto.AccountDto;
+import net.hexabrain.hireo.web.account.dto.RegisterRequest;
 import net.hexabrain.hireo.web.account.dto.mapper.AccountMapper;
 import net.hexabrain.hireo.web.account.service.AccountService;
+import net.hexabrain.hireo.web.common.security.CurrentUser;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,14 +36,14 @@ public class AccountController {
 
     @GetMapping("/new")
     public String signUp(Model model) {
-        AccountDto account = new AccountDto();
+        RegisterRequest account = new RegisterRequest();
         account.setType(AccountType.FREELANCER);
         model.addAttribute("account", account);
         return "new";
     }
 
     @PostMapping("/new")
-    public String signUp(@Valid @ModelAttribute("account") AccountDto account, BindingResult bindingResult) {
+    public String signUp(@Valid @ModelAttribute("account") RegisterRequest account, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult has errors: {}", bindingResult);
             return "new";
@@ -57,9 +60,11 @@ public class AccountController {
     }
 
     @GetMapping("/manage")
-    public String settings(Model model) {
-        Account currentAccount = accountService.getCurrentAccount();
-        AccountDto account = accountMapper.toDto(currentAccount);
+    public String settings(
+            @AuthenticationPrincipal User user,
+            Model model) {
+        Account currentAccount = accountService.findOne(user.getUsername());
+        RegisterRequest account = accountMapper.toDto(currentAccount);
         model.addAttribute("account", account);
         return "account/manage";
     }

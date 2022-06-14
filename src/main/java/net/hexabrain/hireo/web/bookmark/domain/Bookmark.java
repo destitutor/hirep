@@ -1,21 +1,30 @@
 package net.hexabrain.hireo.web.bookmark.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 import net.hexabrain.hireo.web.account.domain.Account;
+import net.hexabrain.hireo.web.account.domain.BaseTimeEntity;
 import net.hexabrain.hireo.web.company.domain.Company;
 import net.hexabrain.hireo.web.job.domain.Job;
 
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"account_id", "company_id"}),
         @UniqueConstraint(columnNames = {"account_id", "job_id"})})
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Bookmark {
+@NoArgsConstructor
+public class Bookmark extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "bookmark_id")
     private Long id;

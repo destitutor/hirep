@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @FieldMatch(first = "password", second = "passwordConfirm")
-public class AccountDto {
+public class RegisterRequest {
     @NotEmpty
     @Email
     @Length(max = 32)

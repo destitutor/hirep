@@ -5,6 +5,7 @@ import net.hexabrain.hireo.web.common.exception.bookmark.AlreadyBookmarkedExcept
 import net.hexabrain.hireo.web.common.exception.company.BookmarkNotFoundException;
 import net.hexabrain.hireo.web.common.exception.company.CompanyNotFoundException;
 import net.hexabrain.hireo.web.common.exception.company.JobNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -23,11 +30,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser(username = "test")
 class BookmarkApiControllerTest {
-    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private BookmarkService bookmarkService;
+
+    @BeforeEach
+    void setUp(WebApplicationContext webApplicationContext) {
+        this.mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .build();
+    }
 
     @Test
     @DisplayName("회사에 새 북마크 추가")
