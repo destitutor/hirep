@@ -1,19 +1,28 @@
 package net.hexabrain.hireo.web.bookmark.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.repository.AccountRepository;
 import net.hexabrain.hireo.web.bookmark.domain.Bookmark;
+import net.hexabrain.hireo.web.bookmark.dto.BookmarkedCompanyResponse;
+import net.hexabrain.hireo.web.bookmark.dto.mapper.BookmarkMapper;
 import net.hexabrain.hireo.web.bookmark.repository.BookmarkRepository;
 import net.hexabrain.hireo.web.common.exception.bookmark.AlreadyBookmarkedException;
 import net.hexabrain.hireo.web.company.domain.Company;
 import net.hexabrain.hireo.web.company.repository.CompanyRepository;
 import net.hexabrain.hireo.web.job.domain.Job;
 import net.hexabrain.hireo.web.job.repository.JobRepository;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
@@ -23,6 +32,17 @@ public class BookmarkService {
     private final CompanyRepository companyRepository;
     private final JobRepository jobRepository;
     private final AccountRepository accountRepository;
+    private final BookmarkMapper bookmarkMapper;
+
+    public Page<BookmarkedCompanyResponse> getCompanyBookmarks(User user, Pageable pageable) {
+        Page<Bookmark> bookmarks = bookmarkRepository.findAllCompanyBookmarks(user.getUsername(), pageable);
+        return new PageImpl<>(
+            bookmarks.stream()
+                .map(bookmarkMapper::toDto)
+                .collect(Collectors.toList())
+            , pageable, bookmarks.getTotalElements()
+        );
+    }
 
     public Long addToCompany(User user, Long companyId) {
         Company company = companyRepository.findByIdOrThrow(companyId);
@@ -54,7 +74,7 @@ public class BookmarkService {
 
     public void deleteOnCompany(User user, Long companyId) {
         Account loggedInUser = accountRepository.findByEmailOrThrow(user.getUsername());
-        Bookmark foundBookmark = bookmarkRepository.findByAccountIdAndCompanyIdOrThrow(companyId, loggedInUser.getId());
+        Bookmark foundBookmark = bookmarkRepository.findByAccountIdAndCompanyIdOrThrow(loggedInUser.getId(), companyId);
         bookmarkRepository.delete(foundBookmark);
     }
 
