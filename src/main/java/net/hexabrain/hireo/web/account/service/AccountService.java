@@ -1,11 +1,8 @@
 package net.hexabrain.hireo.web.account.service;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import net.hexabrain.hireo.web.account.domain.Account;
-import net.hexabrain.hireo.web.account.domain.QAccount;
-import net.hexabrain.hireo.web.account.repository.AccountRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,8 +10,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import net.hexabrain.hireo.web.account.domain.Account;
+import net.hexabrain.hireo.web.account.dto.AccountDto;
+import net.hexabrain.hireo.web.account.dto.mapper.AccountMapper;
+import net.hexabrain.hireo.web.account.repository.AccountRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class AccountService implements UserDetailsService {
     EntityManager entityManager;
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccountMapper accountMapper;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -40,19 +42,9 @@ public class AccountService implements UserDetailsService {
         return this.accountRepository.save(account);
     }
 
-    public Account findOne(Long id) {
-        JPAQueryFactory query = new JPAQueryFactory(entityManager);
-        QAccount account = QAccount.account;
-        return query
-                .selectFrom(account)
-                .where(account.id.eq(id))
-                .join(account.reviews).fetchJoin()
-                .join(account.bookmarks).fetchJoin()
-                .fetchOne();
-    }
-
-    public Account findOne(String email) {
-        return accountRepository.findByEmailOrThrow(email);
+    public AccountDto findByEmail(String email) {
+        Account foundAccount = accountRepository.findByEmailOrThrow(email);
+        return accountMapper.toDto(foundAccount);
     }
 
     public boolean isExist(Long id) {
@@ -61,14 +53,5 @@ public class AccountService implements UserDetailsService {
 
     public long count() {
         return accountRepository.count();
-    }
-
-    public Account getCurrentAccount() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return findOne(((UserDetails) principal).getUsername());
-        } else {
-            return findOne(principal.toString());
-        }
     }
 }

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko" th:replace="~{template/layout/layout-home::layout(content=~{::body}, isTransparentHeader=false, hasFooter=true)}"
+	  xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2 th:text="#{browse-companies}">기업정보</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs" class="dark">
+					<ul>
+						<li><a th:href="@{/}" th:text="#{home}">홈</a></li>
+						<li><a href="#" th:text="#{find-work}">구직</a></li>
+						<li th:text="#{browse-companies}">기업정보</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Page Content
+================================================== -->
+<div class="container">
+	<div class="row">
+		<div class="col-xl-12">
+			<div class="letters-list">
+				<a th:href="@{/companies/list/ㄱ}" class="current">ㄱ</a>
+				<a th:href="@{/companies/list/ㄴ}">ㄴ</a>
+				<a th:href="@{/companies/list/ㄷ}">ㄷ</a>
+				<a th:href="@{/companies/list/ㄹ}">ㄹ</a>
+				<a th:href="@{/companies/list/ㅁ}">ㅁ</a>
+				<a th:href="@{/companies/list/ㅂ}">ㅂ</a>
+				<a th:href="@{/companies/list/ㅅ}">ㅅ</a>
+				<a th:href="@{/companies/list/ㅇ}">ㅇ</a>
+				<a th:href="@{/companies/list/ㅈ}">ㅈ</a>
+				<a th:href="@{/companies/list/ㅊ}">ㅊ</a>
+				<a th:href="@{/companies/list/ㅋ}">ㅋ</a>
+				<a th:href="@{/companies/list/ㅌ}">ㅌ</a>
+				<a th:href="@{/companies/list/ㅍ}">ㅍ</a>
+				<a th:href="@{/companies/list/ㅎ}">ㅎ</a>
+				<a th:href="@{/companies/list/etc}">기타</a>
+			</div>
+		</div>
+		<div class="col-xl-12">
+			<div class="companies-list">
+				<a th:href="@{/companies/{id}(id=${company.id})}" class="company" th:each="company : ${companies}">
+					<div class="company-inner-alignment">
+						<span class="company-logo"><img src="images/company-logo-placeholder.png" alt=""></span>
+						<h4 th:text="${company.name}">회사명</h4>
+						<div class="star-rating" th:data-rating="${company.getAvgRating()}"></div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Spacer -->
+<div class="margin-top-70"></div>
+<!-- Spacer / End-->
+</body>

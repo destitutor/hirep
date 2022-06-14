@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko" th:replace="~{template/layout/layout-home::layout(content=~{::.layout-content}, isTransparentHeader=false, hasFooter=false)}"
+	  xmlns:th="http://www.thymeleaf.org">
+
+<th:block class="layout-content">
+	<!-- Dashboard Container -->
+	<div class="dashboard-container">
+		<!-- Dashboard Sidebar
+        ================================================== -->
+		<div class="dashboard-sidebar">
+			<div class="dashboard-sidebar-inner" data-simplebar>
+				<div class="dashboard-nav-container">
+
+					<!-- Responsive Navigation Trigger -->
+					<a href="#" class="dashboard-responsive-nav-trigger">
+					<span class="hamburger hamburger--collapse" >
+						<span class="hamburger-box">
+							<span class="hamburger-inner"></span>
+						</span>
+					</span>
+						<span class="trigger-title">Dashboard Navigation</span>
+					</a>
+
+					<!-- Navigation -->
+					<div class="dashboard-nav">
+						<div class="dashboard-nav-inner">
+
+							<ul th:data-submenu-title="#{start}">
+								<li class="active"><a th:href="#{/accounts/bookmark}"><i class="icon-material-outline-star-border"></i> <th:block th:text="#{bookmark}">북마크</th:block></a></li>
+								<li><a href="dashboard-reviews.html"><i class="icon-material-outline-rate-review"></i> <th:block th:text="#{reviews}">리뷰</th:block></a></li>
+							</ul>
+
+							<ul th:data-submenu-title="#{organize.manage}">
+								<li><a href="#"><i class="icon-material-outline-business-center"></i> <th:block th:text="#{organize.jobs}">구인</th:block></a>
+									<ul>
+										<li><a href="dashboard-manage-jobs.html"><th:block th:text="#{organize.jobs.manage}">구인 관리</th:block> <span class="nav-tag">3</span></a></li>
+										<li><a href="dashboard-manage-candidates.html" th:text="#{organize.candidates.manage}">지원자 관리</a></li>
+										<li><a href="dashboard-post-a-job.html" th:text="#{organize.jobs.post}">구인 등록</a></li>
+									</ul>
+								</li>
+							</ul>
+
+							<ul th:data-submenu-title="#{account}">
+								<li><a th:href="@{/accounts/manage}"><i class="icon-material-outline-settings"></i> <th:block th:text="#{settings}">설정</th:block></a></li>
+								<li><a href="#" th:class="logout-button"><i class="icon-material-outline-power-settings-new"></i><th:block th:text="#{logout}">로그아웃</th:block></a></li>
+							</ul>
+
+						</div>
+					</div>
+					<!-- Navigation / End -->
+
+				</div>
+			</div>
+		</div>
+		<!-- Dashboard Sidebar / End -->
+
+		<!-- Dashboard Content
+		================================================== -->
+		<div class="dashboard-content-container" data-simplebar>
+			<div class="dashboard-content-inner" >
+
+				<!-- Dashboard Headline -->
+				<div class="dashboard-headline">
+					<h3 th:text="#{bookmark}">북마크</h3>
+
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs" class="dark">
+						<ul>
+							<li><a th:text="#{home}" href="#">홈</a></li>
+							<li><a th:text="#{dashboard}" href="#">대시보드</a></li>
+							<li th:text="#{bookmark}">북마크</li>
+						</ul>
+					</nav>
+				</div>
+
+				<!-- Row -->
+				<div class="row">
+
+					<!-- Dashboard Box -->
+					<div class="col-xl-12">
+						<div class="dashboard-box margin-top-0">
+
+							<!-- Headline -->
+							<div class="headline">
+								<h3><i class="icon-material-outline-business-center"></i>
+									<th:block th:text="#{settings.bookmark.companies}">북마크된 회사</th:block></h3>
+							</div>
+
+							<div class="content">
+								<ul class="dashboard-box-list">
+									<li th:each="companyBookmark : ${companyBookmarks.getContent()}">
+										<!-- Job Listing -->
+										<div class="job-listing">
+
+											<!-- Job Listing Details -->
+											<div class="job-listing-details">
+
+												<!-- Logo -->
+												<a href="#" class="job-listing-company-logo">
+													<img src="images/company-logo-02.png" alt="">
+												</a>
+
+												<!-- Details -->
+												<div class="job-listing-description">
+													<h3 class="job-listing-title"><a th:text="${companyBookmark.company.name}"
+																					 th:href="@{/companies/{companyId}(companyId=${companyBookmark.company.id})}">회사명</a></h3>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Row / End -->
+
+				<!-- Footer -->
+				<div class="dashboard-footer-spacer"></div>
+				<div class="small-footer margin-top-15">
+					<div class="small-footer-copyrights">
+						© 2019 <strong>Hireo</strong>. All Rights Reserved.
+					</div>
+					<ul class="footer-social-links">
+						<li>
+							<a href="#" title="Facebook" data-tippy-placement="top">
+								<i class="icon-brand-facebook-f"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#" title="Twitter" data-tippy-placement="top">
+								<i class="icon-brand-twitter"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#" title="Google Plus" data-tippy-placement="top">
+								<i class="icon-brand-google-plus-g"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#" title="LinkedIn" data-tippy-placement="top">
+								<i class="icon-brand-linkedin-in"></i>
+							</a>
+						</li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<!-- Footer / End -->
+
+			</div>
+		</div>
+		<!-- Dashboard Content / End -->
+
+	</div>
+	<!-- Dashboard Container / End -->
+</th:block>

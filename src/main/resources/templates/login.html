@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko" th:replace="~{template/layout/layout-home::layout(content=~{::body}, isTransparentHeader=false, hasFooter=true)}"
+	xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2 th:text="#{login}">로그인</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs" class="dark">
+					<ul>
+						<li><a href="#" th:text="#{home}">홈</a></li>
+						<li th:text="#{login}">로그인</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Page Content
+================================================== -->
+<div class="container">
+	<div class="row">
+		<div class="col-xl-5 offset-xl-3">
+
+
+			<div class="login-register-page">
+				<!-- Welcome Text -->
+				<div class="welcome-text">
+					<h3 th:text="#{welcome.login}">다시 만나서 반가워요!</h3>
+					<span><th:block th:text="#{dont-have-account}">계정이 없으신가요?</th:block> <a th:text="|#{new}!|" th:href="@{/accounts/new}" href="sign-up.html">회원가입!</a></span>
+				</div>
+					
+				<!-- Form -->
+				<form method="post" th:action="@{/accounts/login}" id="login-form">
+					<!-- Error -->
+					<div th:if="${param.error}" class="notification error closeable">
+						<p th:text="#{invalid.login}">에러 메시지</p>
+						<a class="close"></a>
+					</div>
+
+					<div class="input-with-icon-left">
+						<i class="icon-material-baseline-mail-outline"></i>
+						<input type="email" class="input-text with-border" name="email" id="email" th:placeholder="#{email}" required/>
+					</div>
+
+					<div class="input-with-icon-left">
+						<i class="icon-material-outline-lock"></i>
+						<input type="password" class="input-text with-border" name="password" id="password" th:placeholder="#{password}" required/>
+					</div>
+					<a href="#" th:text="#{forgot-password}" class="forgot-password">비밀번호를 잊으셨나요?</a>
+				</form>
+				
+				<!-- Button -->
+				<button class="button full-width button-sliding-icon ripple-effect margin-top-10" type="submit" form="login-form">
+					<span th:text="#{login}">로그인</span> <i class="icon-material-outline-arrow-right-alt"></i></button>
+				
+				<!-- Social Login -->
+				<div class="social-login-separator"><span th:text="#{or}">혹은</span></div>
+				<div class="social-login-buttons">
+					<button class="kakao-login ripple-effect-dark"><i class="icon-brand-kakao"></i> <span th:text="#{login-with-kakao}">카카오 로그인</span></button>
+					<button class="naver-login ripple-effect-dark"><i class="icon-brand-naver"></i> <span th:text="#{login-with-naver}">네이버 로그인</span></button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<!-- Spacer -->
+<div class="margin-top-70"></div>
+<!-- Spacer / End-->
+</body>

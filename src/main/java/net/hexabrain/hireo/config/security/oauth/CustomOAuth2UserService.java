@@ -7,7 +7,7 @@ import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.domain.AccountType;
 import net.hexabrain.hireo.web.account.domain.Freelancer;
 import net.hexabrain.hireo.web.account.repository.AccountRepository;
-import net.hexabrain.hireo.web.company.domain.Profile;
+import net.hexabrain.hireo.web.account.domain.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

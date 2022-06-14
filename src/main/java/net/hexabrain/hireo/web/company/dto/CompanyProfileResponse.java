@@ -6,6 +6,7 @@ import net.hexabrain.hireo.web.review.dto.ReviewResponse;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
 public class CompanyProfileResponse {
@@ -21,6 +22,7 @@ public class CompanyProfileResponse {
 
     private double averageRating;
 
+    @Accessors(fluent = true)
     private boolean isVerified;
 
     @Builder
