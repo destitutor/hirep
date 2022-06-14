@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
-public class ReviewDto {
+public class ReviewRequest {
     @NotEmpty
     @Length(min = 1, max = 32)
     private String title;

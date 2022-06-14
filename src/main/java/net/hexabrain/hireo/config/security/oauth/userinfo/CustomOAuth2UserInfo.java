@@ -46,7 +46,7 @@ public abstract class CustomOAuth2UserInfo {
     /**
      * 프로바이더에게 받은 인증 정보를 반환합니다.
      * <p>
-     * <code>attributes</code>는 프로바이더가 보낸 인증된 사용자의 세부정보를 담고 있습니다.
+     * {@code attributes}는 프로바이더가 보낸 인증된 사용자의 세부정보를 담고 있습니다.
      *
      * @param registrationId 프로바이더 ID
      * @param attributes 최종 사용자(리소스 소유자)의 속성
