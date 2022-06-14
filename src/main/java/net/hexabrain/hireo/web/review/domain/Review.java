@@ -1,19 +1,26 @@
 package net.hexabrain.hireo.web.review.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import net.hexabrain.hireo.web.account.domain.Account;
+import net.hexabrain.hireo.web.account.domain.BaseTimeEntity;
+import net.hexabrain.hireo.web.company.domain.Company;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import net.hexabrain.hireo.web.account.domain.Account;
-import net.hexabrain.hireo.web.company.domain.Company;
-
-import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review {
+public class Review extends BaseTimeEntity {
     @Id @GeneratedValue
     @Column(name = "review_id")
     private Long id;
@@ -26,9 +33,6 @@ public class Review {
 
     @Column(nullable = false)
     private int rating;
-
-    @Column(nullable = false, columnDefinition = "DATE")
-    private LocalDate postedAt;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,9 +58,5 @@ public class Review {
 
     public void setCompany(Company company) {
         this.company = company;
-    }
-
-    public void setPostedAt(LocalDate postedAt) {
-        this.postedAt = postedAt;
     }
 }
