@@ -14,4 +14,8 @@ public class Profile {
 
     @Column(nullable = false)
     private String name;
+
+    public Profile(String name) {
+        this.name = name;
+    }
 }

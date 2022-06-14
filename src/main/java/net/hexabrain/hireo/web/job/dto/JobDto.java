@@ -2,7 +2,7 @@ package net.hexabrain.hireo.web.job.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import net.hexabrain.hireo.web.company.dto.CompanyDto;
+import net.hexabrain.hireo.web.company.dto.CompanyProfileResponse;
 import net.hexabrain.hireo.web.job.domain.Category;
 import net.hexabrain.hireo.web.job.domain.JobType;
 
@@ -25,5 +25,5 @@ public class JobDto {
 
     private Category category;
 
-    private CompanyDto company;
+    private CompanyProfileResponse company;
 }

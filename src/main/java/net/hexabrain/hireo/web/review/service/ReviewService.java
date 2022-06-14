@@ -1,21 +1,21 @@
 package net.hexabrain.hireo.web.review.service;
 
+import java.util.List;
+import java.util.Optional;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.hexabrain.hireo.web.account.domain.Account;
-import net.hexabrain.hireo.web.company.domain.Company;
-import net.hexabrain.hireo.web.review.domain.Review;
-import net.hexabrain.hireo.web.account.repository.AccountRepository;
-import net.hexabrain.hireo.web.company.repository.CompanyRepository;
-import net.hexabrain.hireo.web.review.repository.ReviewRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import net.hexabrain.hireo.web.account.domain.Account;
+import net.hexabrain.hireo.web.account.repository.AccountRepository;
+import net.hexabrain.hireo.web.company.domain.Company;
+import net.hexabrain.hireo.web.company.repository.CompanyRepository;
+import net.hexabrain.hireo.web.review.domain.Review;
+import net.hexabrain.hireo.web.review.repository.ReviewRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -34,7 +34,6 @@ public class ReviewService {
 
             review.setAuthor(account);
             review.setCompany(company.get());
-            review.setPostedAt(LocalDate.now());
             return reviewRepository.save(review).getId();
         } else {
             throw new RuntimeException("Company not found");

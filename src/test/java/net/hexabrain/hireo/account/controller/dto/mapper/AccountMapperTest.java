@@ -4,7 +4,7 @@ import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.domain.AccountType;
 import net.hexabrain.hireo.web.account.domain.Employer;
 import net.hexabrain.hireo.web.account.domain.Freelancer;
-import net.hexabrain.hireo.web.account.dto.AccountDto;
+import net.hexabrain.hireo.web.account.dto.RegisterRequest;
 import net.hexabrain.hireo.web.account.dto.mapper.AccountMapper;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,7 +25,7 @@ class AccountMapperTest {
     @ParameterizedTest
     @MethodSource
     void resolve(AccountType dtoType, Class<?> actualType) {
-        AccountDto dto = new AccountDto(
+        RegisterRequest dto = new RegisterRequest(
                 "test@test.com", "testtest", "testtest", dtoType, "asd"
         );
         Account mappedAccount = mapper.toEntity(dto);
