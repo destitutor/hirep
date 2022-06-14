@@ -3,6 +3,8 @@ package net.hexabrain.hireo.web.company.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 import net.hexabrain.hireo.web.review.domain.Review;
 
 import javax.persistence.*;
@@ -29,6 +31,7 @@ public class Company {
     private final List<Review> reviews = new ArrayList<>();
 
     @Column(nullable = false)
+    @Accessors(fluent = true)
     private boolean isVerified;
 
     public Company(String name, Address address, boolean isVerified) {

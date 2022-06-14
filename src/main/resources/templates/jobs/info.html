@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ko" th:replace="~{template/layout/layout-home::layout(content=~{::body}, isTransparentHeader=false, hasFooter=true)}" xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+<!-- Titlebar
+================================================== -->
+<div class="single-page-header" th:data-background-image="@{/images/single-job.jpg}">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="single-page-header-inner">
+					<div class="left-side">
+						<div class="header-image"><a href="../single-company-profile.html"><img th:src="@{/images/company-logo-03a.png}" alt=""></a></div>
+						<div class="header-details">
+							<h3 th:text="${job.name}">직업명</h3>
+							<h5>무언가</h5>
+							<ul>
+								<li><a th:href="@{/companies/{companyId}(companyId=${company.id})}"><i class="icon-material-outline-business"></i>
+									<th:block th:text="${company.name}">회사명</th:block></a></li>
+								<li><div class="star-rating" th:data-rating="${#numbers.formatDecimal(company.getAvgRating(), 1, 1)}"></div></li>
+								<li><img class="flag" src="../images/flags/kr.svg" alt=""> 한국</li>
+								<li><div th:if="${company.isVerified}" class="verified-badge-with-title">인증됨</div></li>
+							</ul>
+						</div>
+					</div>
+					<div class="right-side">
+						<div class="salary-box">
+							<div class="salary-type" th:text="#{salary}">연봉</div>
+							<div class="salary-amount">
+								<th:block th:text="|${#numbers.formatDecimal(job.startSalary, 0, 'COMMA', 0, 'POINT')}만|">-만</th:block>
+								-
+								<th:block th:text="|${#numbers.formatDecimal(job.endSalary, 0, 'COMMA', 0, 'POINT')}만|">-만</th:block>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Page Content
+================================================== -->
+<div class="container">
+	<div class="row">
+		
+		<!-- Content -->
+		<div class="col-xl-8 col-lg-8 content-right-offset">
+
+			<div class="single-page-section">
+				<h3 th:text="#{job-about}" class="margin-bottom-25">직무 소개</h3>
+				<p th:text="${job.description}">직무 설명</p>
+			</div>
+
+			<div class="single-page-section">
+				<h3 class="margin-bottom-30" th:text="#{location}">위치</h3>
+				<div id="single-job-map-container">
+					<div id="singleListingMap" th:data-latitude="${company.address.coordinate.latitude}"
+						 th:data-longitude="${company.address.coordinate.longitude}" data-map-icon="im im-icon-Hamburger"></div>
+					<a href="#" id="streetView" th:text="#{street-view}">거리뷰</a>
+				</div>
+			</div>
+
+			<div class="single-page-section">
+				<h3 class="margin-bottom-25" th:text="#{similar-job-search}">유사한 채용공고</h3>
+
+				<!-- Listings Container -->
+				<div class="listings-container grid-layout">
+
+						<!-- Job Listing -->
+						<a href="#" class="job-listing">
+
+							<!-- Job Listing Details -->
+							<div class="job-listing-details">
+								<!-- Logo -->
+								<div class="job-listing-company-logo">
+									<img src="../images/company-logo-02.png" alt="">
+								</div>
+
+								<!-- Details -->
+								<div class="job-listing-description">
+									<h4 class="job-listing-company">커피</h4>
+									<h3 class="job-listing-title">바리스타와 캐셔</h3>
+								</div>
+							</div>
+
+							<!-- Job Listing Footer -->
+							<div class="job-listing-footer">
+								<ul>
+									<li><i class="icon-material-outline-location-on"></i> 샌프란시스코</li>
+									<li><i class="icon-material-outline-business-center"></i> 정규직</li>
+									<li><i class="icon-material-outline-account-balance-wallet"></i> $35000-$38000</li>
+									<li><i class="icon-material-outline-access-time"></i> 2일 전</li>
+								</ul>
+							</div>
+						</a>
+
+						<!-- Job Listing -->
+						<a href="#" class="job-listing">
+
+							<!-- Job Listing Details -->
+							<div class="job-listing-details">
+								<!-- Logo -->
+								<div class="job-listing-company-logo">
+									<img src="../images/company-logo-03.png" alt="">
+								</div>
+
+								<!-- Details -->
+								<div class="job-listing-description">
+									<h4 class="job-listing-company">킹 <span class="verified-badge" title="Verified Employer" data-tippy-placement="top"></span></h4>
+									<h3 class="job-listing-title">레스토랑 매니저</h3>
+								</div>
+							</div>
+
+							<!-- Job Listing Footer -->
+							<div class="job-listing-footer">
+								<ul>
+									<li><i class="icon-material-outline-location-on"></i> 샌프란시스코</li>
+									<li><i class="icon-material-outline-business-center"></i> 정규직</li>
+									<li><i class="icon-material-outline-account-balance-wallet"></i> $35000-$38000</li>
+									<li><i class="icon-material-outline-access-time"></i> 2일 전</li>
+								</ul>
+							</div>
+						</a>
+					</div>
+					<!-- Listings Container / End -->
+
+				</div>
+		</div>
+		
+
+		<!-- Sidebar -->
+		<div class="col-xl-4 col-lg-4">
+			<div class="sidebar-container">
+
+				<a href="#small-dialog" class="apply-now-button popup-with-zoom-anim">지금 지원 <i class="icon-material-outline-arrow-right-alt"></i></a>
+					
+				<!-- Sidebar Widget -->
+				<div class="sidebar-widget">
+					<div class="job-overview">
+						<div class="job-overview-headline">직무 요약</div>
+						<div class="job-overview-inner">
+							<ul>
+								<li>
+									<i class="icon-material-outline-location-on"></i>
+									<span>위치</span>
+									<h5>영국 런던</h5>
+								</li>
+								<li>
+									<i class="icon-material-outline-business-center"></i>
+									<span>고용형태</span>
+									<h5 th:text="${job.jobType}">정규직</h5>
+								</li>
+								<li>
+									<i class="icon-material-outline-local-atm"></i>
+									<span>연봉</span>
+									<h5><th:block th:text="|${#numbers.formatDecimal(job.startSalary, 0, 'COMMA', 0, 'POINT')}만|">-만</th:block>
+										~
+										<th:block th:text="|${#numbers.formatDecimal(job.endSalary, 0, 'COMMA', 0, 'POINT')}만|">-만</th:block></h5>
+								</li>
+								<li>
+									<i class="icon-material-outline-access-time"></i>
+									<span>게시일</span>
+									<h5 th:text="${T(net.hexabrain.hireo.utils.DateUtils).getElapsedDateTime(job.postedAt)}">경과 일 수</h5>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<!-- Sidebar Widget -->
+				<div class="sidebar-widget">
+					<h3>북마크 혹은 공유</h3>
+
+					<!-- Bookmark Button -->
+					<button class="bookmark-button margin-bottom-25" th:data-bookmark-type="jobs" th:data-id="${job.id}"
+							th:classappend="${account?.isJobBookmarked(job.id)} ? 'bookmarked' : ''">
+						<span class="bookmark-icon"></span>
+						<span class="bookmark-text">북마크</span>
+						<span class="bookmarked-text">북마크됨</span>
+					</button>
+
+					<!-- Copy URL -->
+					<div class="copy-url">
+						<input id="copy-url" type="text" value="" class="with-border">
+						<button class="copy-url-button ripple-effect" data-clipboard-target="#copy-url" title="클립보드로 복사하기" data-tippy-placement="top"><i class="icon-material-outline-file-copy"></i></button>
+					</div>
+
+					<!-- Share Buttons -->
+					<div class="share-buttons margin-top-25">
+						<div class="share-buttons-trigger"><i class="icon-feather-share-2"></i></div>
+						<div class="share-buttons-content">
+							<span>관심이 있으세요? <strong>공유하기!</strong></span>
+							<ul class="share-buttons-icons">
+								<li><a href="javascript:void(0)" data-button-color="#3b5998" th:class="'share-on-facebook'" th:title="|#{social.facebook}#{on} #{share-it}|" data-tippy-placement="top"><i class="icon-brand-facebook-f"></i></a></li>
+								<li><a href="javascript:void(0)" data-button-color="#1da1f2" th:class="'share-on-twitter'" th:title="|#{social.twitter}#{on} #{share-it}|" data-tippy-placement="top"><i class="icon-brand-twitter"></i></a></li>
+								<li><a href="javascript:void(0)" data-button-color="#dd4b39" th:class="'share-on-google'" th:title="|#{social.google-plus}#{on} #{share-it}|" data-tippy-placement="top"><i class="icon-brand-google-plus-g"></i></a></li>
+								<li><a href="javascript:void(0)" data-button-color="#0077b5" th:class="'share-on-linkedin'" th:title="|#{social.linkedin}#{on} #{share-it}|" data-tippy-placement="top"><i class="icon-brand-linkedin-in"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+</body>

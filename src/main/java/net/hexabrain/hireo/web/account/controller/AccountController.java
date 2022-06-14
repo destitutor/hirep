@@ -4,12 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.domain.AccountType;
-import net.hexabrain.hireo.web.account.dto.RegisterRequest;
-import net.hexabrain.hireo.web.account.dto.mapper.AccountMapper;
+import net.hexabrain.hireo.web.account.dto.AccountDto;
+import net.hexabrain.hireo.web.account.dto.SignUpDto;
+import net.hexabrain.hireo.web.account.dto.mapper.SignUpMapper;
 import net.hexabrain.hireo.web.account.service.AccountService;
 import net.hexabrain.hireo.web.common.security.CurrentUser;
+
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +28,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-    private final AccountMapper accountMapper;
+    private final SignUpMapper accountMapper;
 
     @GetMapping("/login")
     public String login() {
@@ -36,14 +37,15 @@ public class AccountController {
 
     @GetMapping("/new")
     public String signUp(Model model) {
-        RegisterRequest account = new RegisterRequest();
-        account.setType(AccountType.FREELANCER);
+        SignUpDto account = SignUpDto.builder()
+            .type(AccountType.FREELANCER)
+            .build();
         model.addAttribute("account", account);
         return "new";
     }
 
     @PostMapping("/new")
-    public String signUp(@Valid @ModelAttribute("account") RegisterRequest account, BindingResult bindingResult) {
+    public String signUp(@Valid @ModelAttribute("account") SignUpDto account, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult has errors: {}", bindingResult);
             return "new";
@@ -61,11 +63,10 @@ public class AccountController {
 
     @GetMapping("/manage")
     public String settings(
-            @AuthenticationPrincipal User user,
+            @CurrentUser User user,
             Model model) {
-        Account currentAccount = accountService.findOne(user.getUsername());
-        RegisterRequest account = accountMapper.toDto(currentAccount);
-        model.addAttribute("account", account);
+        AccountDto currentAccount = accountService.findByEmail(user.getUsername());
+        model.addAttribute("account", currentAccount);
         return "account/manage";
     }
 }

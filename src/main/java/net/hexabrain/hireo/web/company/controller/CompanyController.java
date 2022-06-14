@@ -1,5 +1,6 @@
 package net.hexabrain.hireo.web.company.controller;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.thymeleaf.util.StringUtils;
 
 import net.hexabrain.hireo.utils.HangulUtils;
 import net.hexabrain.hireo.web.account.service.AccountService;
+import net.hexabrain.hireo.web.common.security.CurrentUser;
 import net.hexabrain.hireo.web.company.dto.CompanyProfileResponse;
 import net.hexabrain.hireo.web.company.service.CompanyService;
 
@@ -24,7 +26,11 @@ public class CompanyController {
     private final AccountService accountService;
 
     @GetMapping("/{id}")
-    public String profile(@PathVariable("id") Long id, Model model) {
+    public String profile(
+        @CurrentUser User user,
+        @PathVariable("id") Long id,
+        Model model
+    ) {
         if (!companyService.isExist(id)) {
             return "redirect:/error/404";
         }
@@ -32,7 +38,7 @@ public class CompanyController {
         CompanyProfileResponse foundCompany = companyService.findOne(id);
         model.addAttribute("company", foundCompany);
         model.addAttribute("reviews", foundCompany.getReviews());
-        model.addAttribute("account", accountService.getCurrentAccount());
+        model.addAttribute("account", accountService.findByEmail(user.getUsername()));
         return "company/profile";
     }
 

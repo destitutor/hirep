@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ko" th:replace="~{template/layout/layout-home::layout(content=~{::body}, isTransparentHeader=true, hasFooter=true)}"
+	  xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Intro Banner
+================================================== -->
+<div class="intro-banner dark-overlay" data-background-image="images/home-background-02.jpg">
+
+	<!-- Transparent Header Spacer -->
+	<div class="transparent-header-spacer"></div>
+
+	<div class="container">
+
+		<!-- Intro Headline -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="banner-headline">
+					<h3>
+						<strong>언제 어디서나 전문 프리랜서를 고용하세요.</strong>
+						<br>
+						<span>디자이너, 개발자, 작가로 구성된 대형 팀이 당신의 프로젝트를 기다리고 있습니다.</span>
+					</h3>
+				</div>
+			</div>
+		</div>
+
+		<!-- Search Bar -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="intro-banner-search-form margin-top-95">
+
+					<!-- Search Field -->
+					<div class="intro-search-field with-autocomplete">
+						<label for="autocomplete-input" class="field-title ripple-effect">어디서?</label>
+						<div class="input-with-icon">
+							<input id="autocomplete-input" type="text" placeholder="자택">
+							<i class="icon-material-outline-location-on"></i>
+						</div>
+					</div>
+
+					<!-- Search Field -->
+					<div class="intro-search-field">
+						<label for ="intro-keywords" class="field-title ripple-effect">무엇을 하고 싶나요?</label>
+						<input id="intro-keywords" type="text" placeholder="예: 웹사이트 만들기">
+					</div>
+
+					<!-- Search Field -->
+					<div class="intro-search-field">
+						<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="모든 카테고리" >
+							<option>컴퓨터 과학</option>
+							<option>데이터 분석</option>
+							<option>디자인 & 창작</option>
+							<option>소프트웨어 개발</option>
+							<option>IT & 네트워크</option>
+							<option>저술</option>
+							<option>번역</option>
+							<option>영업 & 마케팅</option>
+						</select>
+					</div>
+
+					<!-- Button -->
+					<div class="intro-search-button">
+						<button class="button ripple-effect" onclick="window.location.href='freelancers-grid-layout-full-page.html'">검색</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Stats -->
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="intro-stats margin-top-45 hide-under-992px">
+					<li>
+						<strong class="counter" th:text="${jobCount}">0</strong>
+						<span>구인 수</span>
+					</li>
+					<li>
+						<strong class="counter" th:text="${companyCount}">0</strong>
+						<span>회사 수</span>
+					</li>
+					<li>
+						<strong class="counter" th:text="${accountCount}">0</strong>
+						<span>회원 수</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- Content
+================================================== -->
+
+<!-- Popular Job Categories -->
+<div class="section margin-top-65 margin-bottom-30">
+	<div class="container">
+		<div class="row">
+
+			<!-- Section Headline -->
+			<div class="col-xl-12">
+				<div class="section-headline centered margin-top-0 margin-bottom-45">
+					<h3>인기 카테고리</h3>
+				</div>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-list-layout-1.html" class="photo-box small" data-background-image="images/job-category-01.jpg">
+					<div class="photo-box-content">
+						<h3>웹 / 소프트웨어 개발</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-list-layout-full-page-map.html" class="photo-box small" data-background-image="images/job-category-02.jpg">
+					<div class="photo-box-content">
+						<h3>데이터 과학 / 분석</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-grid-layout-full-page.html" class="photo-box small" data-background-image="images/job-category-03.jpg">
+					<div class="photo-box-content">
+						<h3>회계 / 컨설팅</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-list-layout-2.html" class="photo-box small" data-background-image="images/job-category-04.jpg">
+					<div class="photo-box-content">
+						<h3>저술 & 번역</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-list-layout-1.html" class="photo-box small" data-background-image="images/job-category-05.jpg">
+					<div class="photo-box-content">
+						<h3>영업 & 마케팅</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-list-layout-full-page-map.html" class="photo-box small" data-background-image="images/job-category-06.jpg">
+					<div class="photo-box-content">
+						<h3>그래픽 & 디자인</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-grid-layout-full-page.html" class="photo-box small" data-background-image="images/job-category-07.jpg">
+					<div class="photo-box-content">
+						<h3>디지털 마케팅</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-xl-3 col-md-6">
+				<!-- Photo Box -->
+				<a href="jobs-list-layout-2.html" class="photo-box small" data-background-image="images/job-category-08.jpg">
+					<div class="photo-box-content">
+						<h3>교육 & 훈련</h3>
+						<span>0</span>
+					</div>
+				</a>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!-- Features Cities / End -->
+
+
+
+<!-- Features Jobs -->
+<div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-12">
+
+				<!-- Section Headline -->
+				<div class="section-headline margin-top-0 margin-bottom-35">
+					<h3>최근 과제</h3>
+					<a href="tasks-list-layout-1.html" class="headline-link">모든 과제 보기</a>
+				</div>
+
+				<!-- Jobs Container -->
+				<div class="tasks-list-container compact-list margin-top-35">
+
+					<!-- Task -->
+					<a href="single-task-page.html" class="task-listing">
+
+						<!-- Job Listing Details -->
+						<div class="task-listing-details">
+
+							<!-- Details -->
+							<div class="task-listing-description">
+								<h3 class="task-listing-title">음식 배달 모바일 앱</h3>
+								<ul class="task-icons">
+									<li><i class="icon-material-outline-location-on"></i> 서울</li>
+									<li><i class="icon-material-outline-access-time"></i> 2분 전</li>
+								</ul>
+								<div class="task-tags margin-top-15">
+									<span>iOS</span>
+									<span>안드로이드</span>
+									<span>모바일 앱</span>
+									<span>디자인</span>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="task-listing-bid">
+							<div class="task-listing-bid-inner">
+								<div class="task-offers">
+									<strong>$1,000 - $2,500</strong>
+									<span>고정가</span>
+								</div>
+								<span class="button button-sliding-icon ripple-effect">지금 입찰 <i class="icon-material-outline-arrow-right-alt"></i></span>
+							</div>
+						</div>
+					</a>
+				</div>
+				<!-- Jobs Container / End -->
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Featured Jobs / End -->
+
+<!-- Icon Boxes -->
+<div class="section padding-top-65 padding-bottom-65">
+	<div class="container">
+		<div class="row">
+
+			<div class="col-xl-12">
+				<!-- Section Headline -->
+				<div class="section-headline centered margin-top-0 margin-bottom-5">
+					<h3>어떻게 운영되나요?</h3>
+				</div>
+			</div>
+
+			<div class="col-xl-4 col-md-4">
+				<!-- Icon Box -->
+				<div class="icon-box with-line">
+					<!-- Icon -->
+					<div class="icon-box-circle">
+						<div class="icon-box-circle-inner">
+							<i class="icon-line-awesome-lock"></i>
+							<div class="icon-box-check"><i class="icon-material-outline-check"></i></div>
+						</div>
+					</div>
+					<h3>계정 생성하기</h3>
+					<p>계정을 생성하세요.</p>
+				</div>
+			</div>
+
+			<div class="col-xl-4 col-md-4">
+				<!-- Icon Box -->
+				<div class="icon-box with-line">
+					<!-- Icon -->
+					<div class="icon-box-circle">
+						<div class="icon-box-circle-inner">
+							<i class="icon-line-awesome-legal"></i>
+							<div class="icon-box-check"><i class="icon-material-outline-check"></i></div>
+						</div>
+					</div>
+					<h3>과제 올리기</h3>
+					<p>과제를 올리세요.</p>
+				</div>
+			</div>
+
+			<div class="col-xl-4 col-md-4">
+				<!-- Icon Box -->
+				<div class="icon-box">
+					<!-- Icon -->
+					<div class="icon-box-circle">
+						<div class="icon-box-circle-inner">
+							<i class=" icon-line-awesome-trophy"></i>
+							<div class="icon-box-check"><i class="icon-material-outline-check"></i></div>
+						</div>
+					</div>
+					<h3>전문가 선택하기</h3>
+					<p>전문가를 선택하세요.</p>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!-- Icon Boxes / End -->
+
+
+<!-- Testimonials -->
+<div class="section gray padding-top-65 padding-bottom-55">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-12">
+				<!-- Section Headline -->
+				<div class="section-headline centered margin-top-0 margin-bottom-5">
+					<h3>추천의 글</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Categories Carousel -->
+	<div class="fullwidth-carousel-container margin-top-20">
+		<div class="testimonial-carousel testimonials">
+
+			<!-- Item -->
+			<div class="fw-carousel-review">
+				<div class="testimonial-box">
+					<div class="testimonial-avatar">
+						<img src="images/user-avatar-small-02.jpg" alt="">
+					</div>
+					<div class="testimonial-author">
+						<h4>김철수</h4>
+						<span>프리랜서</span>
+					</div>
+					<div class="testimonial">Hireo는 구직자에게 정말 편리합니다. 면접 약속을 통해서 쉽게 구직 신청, 이력서 제출, 신청 현황을 손쉽게 확인할 수 있습니다. 온라인 취업 지원 관리 도구 덕분입니다.</div>
+				</div>
+			</div>
+
+			<!-- Item -->
+			<div class="fw-carousel-review">
+				<div class="testimonial-box">
+					<div class="testimonial-avatar">
+						<img src="images/user-avatar-small-01.jpg" alt="">
+					</div>
+					<div class="testimonial-author">
+						<h4>김영희</h4>
+						<span>프리랜서</span>
+					</div>
+					<div class="testimonial">Hireo는 매우 편리하고 자신이 원하는 직업과 장소를 쉽게 찾아줍니다. 빈자리가 나면 항상 알려줍니다.</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Categories Carousel / End -->
+
+</div>
+<!-- Testimonials / End -->
+
+
+<!-- Counters -->
+<div class="section padding-top-70 padding-bottom-75">
+	<div class="container">
+		<div class="row">
+
+			<div class="col-xl-12">
+				<div class="counters-container">
+
+					<!-- Counter -->
+					<div class="single-counter">
+						<i class="icon-line-awesome-suitcase"></i>
+						<div class="counter-inner">
+							<h3><span class="counter" th:text="${jobCount}">0</span></h3>
+							<span class="counter-title">구인 수</span>
+						</div>
+					</div>
+
+					<!-- Counter -->
+					<div class="single-counter">
+						<i class="icon-line-awesome-legal"></i>
+						<div class="counter-inner">
+							<h3><span class="counter" th:text="${companyCount}">0</span></h3>
+							<span class="counter-title">회사 수</span>
+						</div>
+					</div>
+
+					<!-- Counter -->
+					<div class="single-counter">
+						<i class="icon-line-awesome-user"></i>
+						<div class="counter-inner">
+							<h3><span class="counter" th:text="${accountCount}">0</span></h3>
+							<span class="counter-title">이용 중인 회원</span>
+						</div>
+					</div>
+
+					<!-- Counter -->
+					<div class="single-counter">
+						<i class="icon-line-awesome-trophy"></i>
+						<div class="counter-inner">
+							<h3><span class="counter">99</span>%</h3>
+							<span class="counter-title">만족도</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Counters / End -->
+</body>

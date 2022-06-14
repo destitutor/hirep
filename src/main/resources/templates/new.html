@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko" th:replace="~{template/layout/layout-home::layout(content=~{::body}, isTransparentHeader=false, hasFooter=true)}"
+	  xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2 th:text="#{new}">회원가입</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs" class="dark">
+					<ul>
+						<li><a href="#" th:text="#{home}">홈</a></li>
+						<li th:text="#{new}">회원가입</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Page Content
+================================================== -->
+<div class="container">
+	<div class="row">
+		<div class="col-xl-5 offset-xl-3">
+
+			<div class="login-register-page">
+				<!-- Welcome Text -->
+				<div class="welcome-text">
+					<h3 style="font-size: 26px;" th:text="#{welcome.sign-up}">계정을 만들어봅시다!</h3>
+					<span><th:block th:text="#{already-have-account}">계정이 이미 있으신가요?</th:block>
+						<a th:href="@{/login}" href="login.html" th:text="|#{login}!|">로그인!</a></span>
+				</div>
+					
+				<!-- Form -->
+				<form method="post" th:object="${account}" th:action="@{/accounts/new}" id="register-account-form">
+					<!-- Account Type -->
+					<div class="account-type">
+						<div>
+							<input type="radio" name="account-type-radio" th:field="*{type}" value="FREELANCER" class="account-type-radio" checked />
+							<label th:for="${#ids.prev('type')}" class="ripple-effect-dark"><i class="icon-material-outline-account-circle"></i> <th:block th:text="#{freelancer}">프리랜서</th:block></label>
+						</div>
+
+						<div>
+							<input type="radio" name="account-type-radio" th:field="*{type}" value="EMPLOYER" class="account-type-radio"/>
+							<label th:for="${#ids.prev('type')}" class="ripple-effect-dark"><i class="icon-material-outline-business-center"></i> <th:block th:text="#{employer}">고용주</th:block></label>
+						</div>
+					</div>
+					<!-- Error -->
+					<div th:if="${#fields.hasErrors()}" class="notification error closeable">
+						<p th:text="${#fields.errors()[0]}">에러 메시지</p>
+						<a class="close"></a>
+					</div>
+					<div class="input-with-icon-left">
+						<i class="icon-material-baseline-mail-outline"></i>
+						<input type="email" class="input-text with-border" th:field="*{email}" placeholder="이메일" th:placeholder="#{email}" required/>
+					</div>
+
+					<div class="input-with-icon-left" th:title="#{tooltip.length.password}" data-tippy-placement="bottom">
+						<i class="icon-material-outline-lock"></i>
+						<input type="password" class="input-text with-border" th:field="*{password}" placeholder="비밀번호" th:placeholder="#{password}" required/>
+					</div>
+
+					<div class="input-with-icon-left">
+						<i class="icon-material-outline-lock"></i>
+						<input type="password" class="input-text with-border" th:field="*{passwordConfirm}" placeholder="비밀번호 확인" th:placeholder="#{repeat-password}" required/>
+					</div>
+				</form>
+
+				<!-- Button -->
+				<button class="button full-width button-sliding-icon ripple-effect margin-top-10" type="submit" form="register-account-form"><th:block th:text="#{new}">회원가입</th:block> <i class="icon-material-outline-arrow-right-alt"></i></button>
+
+				<!-- Social Login -->
+				<div class="social-login-separator"><span th:text="#{or}">혹은</span></div>
+				<div class="social-login-buttons">
+					<button class="facebook-login ripple-effect"><i class="icon-brand-facebook-f"></i> <th:block th:text="#{register-with-facebook}">페이스북으로 회원가입</th:block></button>
+					<button class="google-login ripple-effect"><i class="icon-brand-google-plus-g"></i> <th:block th:text="#{register-with-google}">구글로 회원가입</th:block></button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<!-- Spacer -->
+<div class="margin-top-70"></div>
+<!-- Spacer / End-->
+</body>

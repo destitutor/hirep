@@ -1,17 +1,29 @@
 package net.hexabrain.hireo.web.account.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import net.hexabrain.hireo.web.bookmark.domain.Bookmark;
+import net.hexabrain.hireo.web.review.domain.Review;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import net.hexabrain.hireo.web.bookmark.domain.Bookmark;
-import net.hexabrain.hireo.web.company.domain.Profile;
-import net.hexabrain.hireo.web.review.domain.Review;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter @ToString

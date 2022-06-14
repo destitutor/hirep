@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko" th:replace="~{template/layout/layout-home::layout(content=~{::body}, isTransparentHeader=false, hasFooter=false)}"
+	  xmlns:th="http://www.thymeleaf.org/">
+
+<body>
+<!-- Page Content
+================================================== -->
+<div class="full-page-container with-map">
+
+	<div class="full-page-sidebar hidden-sidebar">
+		<div class="full-page-sidebar-inner" data-simplebar>
+			<form id="search-form" method="get" th:action="@{/jobs/search}">
+				<div class="sidebar-container">
+					<!-- Keywords -->
+					<div class="sidebar-widget">
+						<h3 th:text="#{keywords}">키워드</h3>
+						<div class="keywords-container">
+							<div class="keyword-input-container">
+								<input type="text" class="keyword-input" id="keyword" name="keyword" th:placeholder="#{keywords.input.placeholder}"/>
+								<button type="button" class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
+							</div>
+							<div class="keywords-list"><!-- keywords go here --></div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+
+					<!-- Category -->
+					<div class="sidebar-widget">
+						<h3 th:text="#{category}">카테고리</h3>
+						<select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" th:title="#{category.all}" >
+							<option>Admin Support</option>
+							<option>Customer Service</option>
+							<option>Data Analytics</option>
+							<option>Design & Creative</option>
+							<option>Legal</option>
+							<option>Software Developing</option>
+							<option>IT & Networking</option>
+							<option>Writing</option>
+							<option>Translation</option>
+							<option>Sales & Marketing</option>
+						</select>
+					</div>
+
+					<!-- Job Types -->
+					<div class="sidebar-widget">
+						<h3 th:text="#{job-type}">고용형태</h3>
+
+						<div class="switches-list">
+							<div class="switch-container">
+								<label class="switch"><input type="checkbox"><span class="switch-button"></span> <th:block th:text="#{freelancer}">프리랜서</th:block></label>
+							</div>
+
+							<div class="switch-container">
+								<label class="switch"><input type="checkbox"><span class="switch-button"></span> <th:block th:text="#{full-time}">정규직</th:block></label>
+							</div>
+
+							<div class="switch-container">
+								<label class="switch"><input type="checkbox"><span class="switch-button"></span> <th:block th:text="#{part-time}">계약직</th:block></label>
+							</div>
+
+							<div class="switch-container">
+								<label class="switch"><input type="checkbox"><span class="switch-button"></span> <th:block th:text="#{internship}">인턴</th:block></label>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- Salary -->
+					<div class="sidebar-widget">
+						<h3 th:text="#{salary}">연봉</h3>
+						<div class="margin-top-55"></div>
+
+						<!-- Range Slider -->
+						<input class="range-slider" name="salary" id="salary" type="text" value="" data-slider-currency="$" data-slider-min="1500" data-slider-max="30000" data-slider-step="100" data-slider-value="[1500,30000]"/>
+					</div>
+
+					<!-- Tags -->
+					<div class="sidebar-widget">
+						<h3 th:text="#{tags}">태그</h3>
+
+						<div class="tags-container">
+							<div class="tag">
+								<input type="checkbox" id="tag1"/>
+								<label for="tag1">front-end dev</label>
+							</div>
+							<div class="tag">
+								<input type="checkbox" id="tag2"/>
+								<label for="tag2">angular</label>
+							</div>
+							<div class="tag">
+								<input type="checkbox" id="tag3"/>
+								<label for="tag3">react</label>
+							</div>
+							<div class="tag">
+								<input type="checkbox" id="tag4"/>
+								<label for="tag4">vue js</label>
+							</div>
+							<div class="tag">
+								<input type="checkbox" id="tag5"/>
+								<label for="tag5">web apps</label>
+							</div>
+							<div class="tag">
+								<input type="checkbox" id="tag6"/>
+								<label for="tag6">design</label>
+							</div>
+							<div class="tag">
+								<input type="checkbox" id="tag7"/>
+								<label for="tag7">wordpress</label>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+
+				</div>
+				<!-- Sidebar Container / End -->
+
+				<!-- Search Button -->
+				<div class="sidebar-search-button-container">
+					<button type="submit" class="button ripple-effect" th:text="#{search}">검색</button>
+				</div>
+				<!-- Search Button / End-->
+			</form>
+		</div>
+	</div>
+	<!-- Full Page Sidebar / End -->
+
+
+	<!-- Full Page Content -->
+	<div class="full-page-content-container" data-simplebar>
+		<div class="full-page-content-inner">
+
+			<h3 class="page-title" th:text="#{search-results}">검색 결과</h3>
+
+			<div class="notify-box margin-top-15">
+				<div class="switch-container">
+					<label class="switch"><input type="checkbox"><span class="switch-button"></span><span class="switch-text" th:text="#{search.turn-on-email-notifications}">이 검색 결과를 이메일로 알림</span></label>
+				</div>
+
+				<div class="sort-by">
+					<span th:text="|#{sort-by}:|">정렬:</span>
+					<select class="selectpicker hide-tick">
+						<option th:text="#{sort-by.relevance}">관련도순</option>
+						<option th:text="#{sort-by.newest}">최신순</option>
+						<option th:text="#{sort-by.oldest}">오래된순</option>
+						<option th:text="#{sort-by.random}">무작위순</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="listings-container grid-layout margin-top-35">
+
+				<!-- Job Listing -->
+				<a th:each="job : ${results.jobs}" th:href="@{/jobs/{id}(id=${job.id})}" class="job-listing">
+
+					<!-- Job Listing Details -->
+					<div class="job-listing-details">
+						<!-- Logo -->
+						<div class="job-listing-company-logo">
+							<img th:src="@{/images/company-logo-01.png}" alt="">
+						</div>
+
+						<!-- Details -->
+						<div class="job-listing-description">
+							<h4 class="job-listing-company"><th:block th:text="${job.company.name}">회사명</th:block> <span class="verified-badge" th:title="#{verified-employer}" data-tippy-placement="top"></span></h4>
+							<h3 class="job-listing-title" th:text="${job.name}">직업명</h3>
+						</div>
+					</div>
+
+					<!-- Job Listing Footer -->
+					<div class="job-listing-footer">
+						<span class="bookmark-icon" th:data-bookmark-type="jobs" th:data-id="${job.id}"
+							  th:classappend="${account?.isJobBookmarked(job.id)} ? 'bookmarked' : ''"></span>
+						<ul>
+							<li><i class="icon-material-outline-location-on"></i> San Francisco</li>
+							<li><i class="icon-material-outline-business-center"></i> <th:block th:text="${job.jobType}">고용형태</th:block></li>
+							<li><i class="icon-material-outline-account-balance-wallet"></i> <th:block th:text="|${job.startSalary}만-${job.endSalary}만|"></th:block></li>
+							<li><i class="icon-material-outline-access-time"></i>
+								<th:block th:text="${T(net.hexabrain.hireo.utils.DateUtils).getElapsedDateTime(job.postedAt)}">경과 일 수</th:block></li>
+						</ul>
+					</div>
+				</a>
+
+			</div>
+
+			<!-- Pagination -->
+			<div class="clearfix"></div>
+			<div class="pagination-container margin-top-20 margin-bottom-20">
+				<nav class="pagination">
+					<ul>
+						<li th:classappend="${results.page == 1} ? 'disabled' : ''" class="pagination-arrow">
+							<a href="#" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-left"></i></a>
+						</li>
+						<li th:each="pageNumber : ${#numbers.sequence(1, results.totalPages)}">
+							<a th:href="@{/jobs/search(page=${pageNumber})}"
+							   th:classappend="${results.page == pageNumber} ? 'current-page' : ''"
+							   class="ripple-effect">
+								<th:block th:text="${pageNumber}"></th:block>
+							</a>
+						</li>
+						<li th:classappend="${results.page == results.totalPages} ? 'disabled' : ''" class="pagination-arrow">
+							<a href="#" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-right"></i></a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<div class="clearfix"></div>
+			<!-- Pagination / End -->
+
+			<!-- Footer -->
+			<div class="small-footer margin-top-15">
+				<div class="small-footer-copyrights">
+					© 2019 <strong>Hireo</strong>. All Rights Reserved.
+				</div>
+				<ul class="footer-social-links">
+					<li>
+						<a href="#" title="Facebook" data-tippy-placement="top">
+							<i class="icon-brand-facebook-f"></i>
+						</a>
+					</li>
+					<li>
+						<a href="#" title="Twitter" data-tippy-placement="top">
+							<i class="icon-brand-twitter"></i>
+						</a>
+					</li>
+					<li>
+						<a href="#" title="Google Plus" data-tippy-placement="top">
+							<i class="icon-brand-google-plus-g"></i>
+						</a>
+					</li>
+					<li>
+						<a href="#" title="LinkedIn" data-tippy-placement="top">
+							<i class="icon-brand-linkedin-in"></i>
+						</a>
+					</li>
+				</ul>
+				<div class="clearfix"></div>
+			</div>
+			<!-- Footer / End -->
+
+		</div>
+	</div>
+	<!-- Full Page Content / End -->
+
+
+	<!-- Full Page Map -->
+	<div class="full-page-map-container">
+
+		<!-- Enable Filters Button -->
+		<div class="filter-button-container">
+			<button class="enable-filters-button">
+				<i class="enable-filters-button-icon"></i>
+				<span class="show-text" th:text="#{show.filter}">필터 보기</span>
+				<span class="hide-text" th:text="#{hide.filter}">필터 숨기기</span>
+			</button>
+			<div class="filter-button-tooltip">Click to expand sidebar with filters!</div>
+		</div>
+
+		<!-- Map -->
+	    <div id="map" data-map-zoom="12"  data-map-scroll="true"></div>
+	</div>
+	<!-- Full Page Map / End -->
+
+	<style>
+		.disabled {
+			pointer-events: none;
+			cursor: default;
+			opacity: 0.5;
+		}
+	</style>
+</div>
+</body>

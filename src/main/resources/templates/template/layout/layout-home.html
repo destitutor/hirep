@@ -1,0 +1,472 @@
+<html th:fragment="layout(content, isTransparentHeader, hasFooter)" lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<!doctype html>
+<html lang="ko">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title>Hireo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/colors/blue.css}">
+
+</head>
+
+<body>
+<!-- Wrapper -->
+<div id="wrapper" th:classappend="${isTransparentHeader} ? 'wrapper-with-transparent-header' : 'wrapper'">
+
+    <!-- Header Container
+    ================================================== -->
+    <header id="header-container" class="fullwidth" th:classappend="${isTransparentHeader} ? 'transparent-header' : ''">
+
+        <!-- Header -->
+        <div id="header">
+            <div class="container">
+
+                <!-- Left Side Content -->
+                <div class="left-side">
+
+                    <!-- Logo -->
+                    <div id="logo">
+                        <a href="/"><img th:src="${isTransparentHeader} ? @{/images/logo2.png} : @{/images/logo.png}"
+                                         th:data-sticky-logo="@{/images/logo.png}"
+                                         th:data-transparent-logo="@{/images/logo2.png}"
+                                         alt=""></a>
+                    </div>
+
+                    <!-- Main Navigation -->
+                    <nav id="navigation">
+                        <ul id="responsive">
+                            <li><a href="#" th:text="#{find-work}">구직</a>
+                                <ul class="dropdown-nav">
+                                    <li><a th:href="@{/jobs/search}" th:text="#{browse-jobs}">채용정보</a></li>
+                                    <li><a th:href="@{/companies/list/가}" th:text="#{browse-companies}">기업정보</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" th:text="#{settings}">설정</a>
+                                <ul class="dropdown-nav">
+                                    <li><a th:href="@{/dashboard}" th:text="#{dashboard}">대시보드</a></li>
+                                    <li><a th:href="@{/accounts/bookmark}" th:text="#{bookmark}">북마크</a></li>
+                                    <li><a th:href="@{/accounts/review}" th:text="#{reviews}">리뷰</a></li>
+                                    <li><a th:href="@{/offers/manage}" th:text="#{organize.jobs.manage}">구인</a></li>
+                                    <li><a th:href="@{/accounts/manage}" th:text="#{settings}">설정</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="clearfix"></div>
+                    <!-- Main Navigation / End -->
+
+                </div>
+                <!-- Left Side Content / End -->
+
+
+                <!-- Right Side Content / End -->
+                <div class="right-side">
+
+                    <div class="header-widget">
+                        <!-- Non-Authorized User -->
+                        <th:block sec:authorize="!isAuthenticated()">
+                            <a href="#sign-in-dialog" class="popup-with-zoom-anim log-in-button"><i class="icon-feather-log-in"></i> <span>로그인 / 회원가입</span></a>
+                        </th:block>
+                        <!-- Authorized User -->
+                        <th:block sec:authorize="isAuthenticated()">
+                            <!-- Messages -->
+                            <div class="header-notifications user-menu">
+                                <div class="header-notifications-trigger">
+                                    <a href="#"><div class="user-avatar status-online"><img th:src="@{/images/user-avatar-small-01.jpg}" alt=""></div></a>
+                                </div>
+
+                                <!-- Dropdown -->
+                                <div class="header-notifications-dropdown">
+
+                                    <!-- User Status -->
+                                    <div class="user-status">
+
+                                        <!-- User Name / Avatar -->
+                                        <div class="user-details">
+                                            <div class="user-avatar status-online"><img th:src="@{/images/user-avatar-small-01.jpg}" alt=""></div>
+                                            <div class="user-name">
+                                                김철수 <span th:text="#{freelancer}">프리랜서</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- User Status Switcher -->
+                                        <div class="status-switch" id="snackbar-user-status">
+                                            <label class="user-online current-status" th:text="#{online}">온라인</label>
+                                            <label class="user-invisible" th:text="#{invisible}">오프라인 표시</label>
+                                            <!-- Status Indicator -->
+                                            <span class="status-indicator" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="user-menu-small-nav">
+                                        <li><a href="dashboard.html"><i class="icon-material-outline-dashboard"></i> <th:block th:text="#{dashboard}">대시보드</th:block></a></li>
+                                        <li><a th:href="@{/accounts/manage}"><i class="icon-material-outline-settings"></i> <th:block th:text="#{settings}">설정</th:block></a></li>
+                                        <li><form id="logout-form" th:action="@{/accounts/logout}" method="post">
+                                            <button id="logout"><i class="icon-material-outline-power-settings-new"></i>
+                                            <th:block th:text="#{logout}">로그아웃</th:block></button>
+                                        </form></li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+
+                    <!-- Mobile Navigation Button -->
+                    <span class="mmenu-trigger">
+					<button class="hamburger hamburger--collapse" type="button">
+						<span class="hamburger-box">
+							<span class="hamburger-inner"></span>
+						</span>
+					</button>
+				</span>
+
+                </div>
+                <!-- Right Side Content / End -->
+            </div>
+        </div>
+        <!-- Header / End -->
+
+    </header>
+    <div class="clearfix"></div>
+    <!-- Header Container / End -->
+
+    <th:block th:replace="${content}">
+        <p>레이아웃 콘텐츠</p>
+    </th:block>
+
+    <!-- Footer
+    ================================================== -->
+    <div id="footer" th:if="${hasFooter}">
+
+        <!-- Footer Top Section -->
+        <div class="footer-top-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+
+                        <!-- Footer Rows Container -->
+                        <div class="footer-rows-container">
+
+                            <!-- Left Side -->
+                            <div class="footer-rows-left">
+                                <div class="footer-row">
+                                    <div class="footer-row-inner footer-logo">
+                                        <img src="images/logo2.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Side -->
+                            <div class="footer-rows-right">
+
+                                <!-- Social Icons -->
+                                <div class="footer-row">
+                                    <div class="footer-row-inner">
+                                        <ul class="footer-social-links">
+                                            <li>
+                                                <a href="#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
+                                                    <i class="icon-brand-facebook-f"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" title="Twitter" data-tippy-placement="bottom" data-tippy-theme="light">
+                                                    <i class="icon-brand-twitter"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" title="Google Plus" data-tippy-placement="bottom" data-tippy-theme="light">
+                                                    <i class="icon-brand-google-plus-g"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#" title="LinkedIn" data-tippy-placement="bottom" data-tippy-theme="light">
+                                                    <i class="icon-brand-linkedin-in"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Language Switcher -->
+                                <div class="footer-row">
+                                    <div class="footer-row-inner">
+                                        <select class="selectpicker language-switcher" data-selected-text-format="count" data-size="2">
+                                            <option selected>한국어</option>
+                                            <option>English</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Footer Rows Container / End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Top Section / End -->
+
+        <!-- Footer Middle Section -->
+        <div class="footer-middle-section">
+            <div class="container">
+                <div class="row">
+
+                    <!-- Links -->
+                    <div class="col-xl-2 col-lg-2 col-md-3">
+                        <div class="footer-links">
+                            <h3>무언가</h3>
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="col-xl-2 col-lg-2 col-md-3">
+                        <div class="footer-links">
+                            <h3>무언가</h3>
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="col-xl-2 col-lg-2 col-md-3">
+                        <div class="footer-links">
+                            <h3>유용한 링크</h3>
+                            <ul>
+                                <li><a href="#"><span>고객문의</span></a></li>
+                                <li><a href="#"><span>개인정보보호정책</span></a></li>
+                                <li><a href="#"><span>약관</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Links -->
+                    <div class="col-xl-2 col-lg-2 col-md-3">
+                        <div class="footer-links">
+                            <h3>계정</h3>
+                            <ul>
+                                <li><a href="#"><span>로그인</span></a></li>
+                                <li><a href="#"><span>내 계정</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter -->
+                    <div class="col-xl-4 col-lg-4 col-md-12">
+                        <h3><i class="icon-feather-mail"></i> 뉴스레터 구독하기</h3>
+                        <p>매주 새로운 소식과 분석, 구직에 관한 최신 정보를 제공합니다.</p>
+                        <form action="#" method="get" class="newsletter">
+                            <input type="text" name="fname" placeholder="이메일 주소를 입력해주세요">
+                            <button type="submit"><i class="icon-feather-arrow-right"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Middle Section / End -->
+
+        <!-- Footer Copyrights -->
+        <div class="footer-bottom-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        © 2019 <strong>Hireo</strong>. All Rights Reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Copyrights / End -->
+
+    </div>
+    <!-- Footer / End -->
+
+</div>
+<!-- Wrapper / End -->
+
+<!-- Sign In Popup
+================================================== -->
+<div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
+
+    <!--Tabs -->
+    <div class="sign-in-form">
+
+        <ul class="popup-tabs-nav">
+            <li><a href="#login">로그인</a></li>
+            <li><a href="#register">회원가입</a></li>
+        </ul>
+
+        <div class="popup-tabs-container">
+
+            <!-- Login -->
+            <div class="popup-tab-content" id="login">
+
+                <!-- Welcome Text -->
+                <div class="welcome-text">
+                    <h3 th:text="#{welcome.login}">다시 만나서 반가워요!</h3>
+                    <span><th:block th:text="#{dont-have-account}">계정이 없으신가요?</th:block> <a th:href="@{/accounts/new}" class="register-tab" th:text="#{new}">회원가입!</a></span>
+                </div>
+
+                <!-- Form -->
+                <form method="post" th:action="@{/accounts/login}" id="login-form">
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-baseline-mail-outline"></i>
+                        <input type="email" class="input-text with-border" name="email" id="email" th:placeholder="#{email}" required/>
+                    </div>
+
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-outline-lock"></i>
+                        <input type="password" class="input-text with-border" name="password" id="password" th:placeholder="#{password}" required/>
+                    </div>
+                    <a href="#" class="forgot-password" th:text="#{forgot-password}">비밀번호를 잊으셨나요?</a>
+                </form>
+
+                <!-- Button -->
+                <button class="button full-width button-sliding-icon ripple-effect" type="submit" form="login-form"><th:block th:text="#{login}">로그인</th:block> <i class="icon-material-outline-arrow-right-alt"></i></button>
+
+                <!-- Social Login -->
+                <div class="social-login-separator"><span th:text="#{or}">혹은</span></div>
+                <div class="social-login-buttons">
+                    <button class="kakao-login ripple-effect-dark"><i class="icon-brand-kakao"></i> <th:block th:text="#{login-with-kakao}">카카오 로그인</th:block></button>
+                    <button class="naver-login ripple-effect-dark"><i class="icon-brand-naver"></i> <th:block th:text="#{login-with-naver}">네이버 로그인</th:block></button>
+                </div>
+
+            </div>
+
+            <!-- Register -->
+            <div class="popup-tab-content" id="register">
+
+                <!-- Welcome Text -->
+                <div class="welcome-text">
+                    <h3 th:text="#{welcome.sign-up}">계정을 만들어봅시다!</h3>
+                </div>
+
+                <!-- Form -->
+                <form method="post" th:action="@{/accounts/new}" id="register-account-form">
+                    <!-- Account Type -->
+                    <div class="account-type">
+                        <div>
+                            <input type="radio" name="type" id="type1" value="FREELANCER" class="account-type-radio" checked/>
+                            <label for="type1" class="ripple-effect-dark"><i class="icon-material-outline-account-circle"></i> <th:block th:text="#{freelancer}">프리랜서</th:block></label>
+                        </div>
+
+                        <div>
+                            <input type="radio" name="type" id="type2" value="EMPLOYER" class="account-type-radio"/>
+                            <label for="type2" class="ripple-effect-dark"><i class="icon-material-outline-business-center"></i> <th:block th:text="#{employer}">고용주</th:block></label>
+                        </div>
+                    </div>
+
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-baseline-mail-outline"></i>
+                        <input type="text" class="input-text with-border" name="email" id="emailaddress-register" th:placeholder="#{email}" required/>
+                    </div>
+
+                    <div class="input-with-icon-left" th:title="#{tooltip.length.password}" data-tippy-placement="bottom">
+                        <i class="icon-material-outline-lock"></i>
+                        <input type="password" class="input-text with-border" name="password" id="password-register" th:placeholder="#{password}" required/>
+                    </div>
+
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-outline-lock"></i>
+                        <input type="password" class="input-text with-border" name="passwordConfirm" id="password-repeat-register" th:placeholder="#{repeat-password}" required/>
+                    </div>
+                </form>
+
+                <!-- Button -->
+                <button class="margin-top-10 button full-width button-sliding-icon ripple-effect" type="submit" form="register-account-form">회원가입 <i class="icon-material-outline-arrow-right-alt"></i></button>
+
+                <!-- Social Login -->
+                <div class="social-login-separator"><span>혹은</span></div>
+                <div class="social-login-buttons">
+                    <button class="kakao-login ripple-effect-dark"><i class="icon-brand-kakao"></i> <th:block th:text="#{login-with-kakao}">카카오 로그인</th:block></button>
+                    <button class="naver-login ripple-effect-dark"><i class="icon-brand-naver"></i> <th:block th:text="#{login-with-naver}">네이버 로그인</th:block></button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Sign In Popup / End -->
+
+<!-- Scripts
+================================================== -->
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/jquery-migrate-3.3.2.min.js}"></script>
+<script th:src="@{/js/mmenu.min.js}"></script>
+<script th:src="@{/js/tippy.all.min.js}"></script>
+<script th:src="@{/js/simplebar.min.js}"></script>
+<script th:src="@{/js/bootstrap-slider.min.js}"></script>
+<script th:src="@{/js/bootstrap-select.min.js}"></script>
+<script th:src="@{/js/snackbar.js}"></script>
+<script th:src="@{/js/clipboard.min.js}"></script>
+<script th:src="@{/js/counterup.min.js}"></script>
+<script th:src="@{/js/magnific-popup.min.js}"></script>
+<script th:src="@{/js/slick.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+
+<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
+<script>
+    // Snackbar for user status switcher
+    $('#snackbar-user-status label').click(function() {
+        Snackbar.show({
+            text: '상태가 변경되었습니다!',
+            pos: 'bottom-center',
+            showAction: false,
+            actionText: "Dismiss",
+            duration: 3000,
+            textColor: '#fff',
+            backgroundColor: '#383838'
+        });
+    });
+
+    // Snackbar for copy to clipboard button
+    $('.copy-url-button').click(function() {
+        Snackbar.show({
+            text: '클립보드로 복사되었습니다!',
+        });
+    });
+</script>
+
+<!-- Leaflet // Docs: https://leafletjs.com/ -->
+<script th:src="@{/js/leaflet.min.js}"></script>
+
+<!-- Leaflet Geocoder + Search Autocomplete // Docs: https://github.com/perliedman/leaflet-control-geocoder -->
+<script th:src="@{/js/leaflet-autocomplete.js}"></script>
+<script th:src="@{/js/leaflet-control-geocoder.js}"></script>
+
+<!-- Google Autocomplete -->
+<script>
+    function initAutocomplete() {
+        var options = {
+            types: ['(cities)'],
+            // componentRestrictions: {country: "us"}
+        };
+
+        var input = document.getElementById('autocomplete-input');
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+    }
+</script>
+
+<!-- Google API & Maps -->
+<!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
+<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script>
+<script th:src="@{/js/infobox.min.js}"></script>
+<script th:src="@{/js/markerclusterer.js}"></script>
+<script th:src="@{/js/maps.js}"></script>
+
+</body>
+</html>
