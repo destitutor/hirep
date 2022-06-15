@@ -1,7 +1,6 @@
 #!/bin/bash
 
 PROJECT_ROOT_PATH=/home/ubuntu/server/deploy
-JAR_PATH=$PROJECT_ROOT_PATH/hireo-springboot-webservice.jar
 
 APP_LOG_PATH=$PROJECT_ROOT_PATH/logs/app.log
 ERROR_LOG_PATH=$PROJECT_ROOT_PATH/logs/error.log
@@ -16,13 +15,16 @@ ABS_DIR=$(dirname "$ABS_PATH")
 source "$ABS_DIR"/profile.sh
 
 echo "> 빌드 파일 복사" >> $DEPLOY_LOG_PATH
-cp $PROJECT_ROOT_PATH/build/libs/*.jar $JAR_PATH
+cp $PROJECT_ROOT_PATH/build/libs/*.jar $PROJECT_ROOT_PATH/
+
+echo "> 새 애플리케이션 배포" >> $DEPLOY_LOG_PATH
+JAR_NAME=$(ls -tr $PROJECT_ROOT_PATH/*.jar | tail -n 1)
 
 IDLE_PROFILE=$(find_idle_profile)
 
 # jar 파일 실행
-echo "> $JAR_PATH 를 profile=$IDLE_PROFILE 로 실행합니다." >> $DEPLOY_LOG_PATH
+echo "> $JAR_NAME 를 profile=$IDLE_PROFILE 로 실행합니다." >> $DEPLOY_LOG_PATH
 nohup java -jar \
  -Dspring.config.location=file:$PROJECT_ROOT_PATH/application-"$IDLE_PROFILE".yml,file:$PROJECT_ROOT_PATH/application-oauth.yml,file:$PROJECT_ROOT_PATH/application-db.yml \
  -Dspring.profiles.active="$IDLE_PROFILE" \
- $JAR_PATH > $APP_LOG_PATH 2> $ERROR_LOG_PATH &
+ $JAR_NAME > $APP_LOG_PATH 2> $ERROR_LOG_PATH &
