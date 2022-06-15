@@ -13,6 +13,7 @@ env:
   S3_BUCKET_NAME: hireo-springboot-build
   CODE_DEPLOY_APPLICATION_NAME: hireo-springboot-webservice
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: hireo-springboot-webservice-group
+  RESOURCE_PATH: ./src/test/resources
   
 jobs:
   build-and-deploy:
@@ -32,6 +33,14 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+          
+      - name: Set up yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.RESOURCE_PATH }}/application.yml
+        env:
+          security.jwt.base64-secret: ${{ secrets.JWT_SECRET }}
+          security.jwt.expiration-time: ${{ secrets.JWT_EXPIRATION_TIME }}
 
       # .gradle 디렉터리 전체를 캐시하는 대신 이 build-action은
       # 캐싱이 필요한 특정 하위 디렉터리만 선택한다. 캐싱은 기본적으로 활성화되어 있다.
