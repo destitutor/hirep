@@ -1,3 +1,8 @@
+# 1. 서버 구성
+<p align="center">
+  <img src="https://i.imgur.com/UGPphCa.png">
+</p>
+
 # 2. 서버 사이드
 ## 기술 스택
 - JAVA 11
