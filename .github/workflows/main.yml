@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - main
-      
+
 # 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름을 차례대로 채워넣는다.
 env:
   AWS_REGION: ap-northeast-2
@@ -14,7 +14,7 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: hireo-springboot-webservice
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: hireo-springboot-webservice-group
   RESOURCE_PATH: ./src/test/resources
-  
+
 jobs:
   build-and-deploy:
     # 깃헙에서 호스팅하는 가상 서버 환경을 정의한다.
@@ -33,7 +33,7 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          
+
       - name: Set up yaml
         uses: microsoft/variable-substitution@v1
         with:
@@ -66,11 +66,11 @@ jobs:
       - name: Upload to AWS S3
         run: |
           aws deploy push \
-            --application-name ${{ env.CODE_DEPLOY_APPLICATION_nAME }} \
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
             --ignore-hidden-files \
             --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
             --source .
-            
+
       # S3 버킷에 있는 파일을 대상으로 CodeDeploy를 실행한다.
       # deployment-config-name은 배포 방식인데 기본값을 사용한다.
       - name: Deploy to AWS EC2 from S3
