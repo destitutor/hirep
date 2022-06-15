@@ -44,19 +44,6 @@ class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("존재하는 이메일을 찾으려고 하면 정상 반환")
-    void findAccountByExistingEmail() {
-        String input = "existing@email.com";
-        Account expected = new Employer(input, "password", AccountType.EMPLOYER, new Profile("empty"));
-
-        when(accountRepository.findByEmailOrThrow(any())).thenReturn(expected);
-
-        AccountDto foundAccount = accountService.findByEmail(input);
-
-        // assertThat(foundAccount).isEqualTo(expectedDto);
-    }
-
-    @Test
     void save() {
         Account expectedAccount = new Employer("test@test.com", "test1234", AccountType.EMPLOYER, null);
 
