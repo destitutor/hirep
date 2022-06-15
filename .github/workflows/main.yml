@@ -29,8 +29,6 @@ jobs:
           java-version: 11
           distribution: temurin
 	  
-	  
-	  
       # .gradle 디렉터리 전체를 캐시하는 대신 이 build-action은
       # 캐싱이 필요한 특정 하위 디렉터리만 선택한다. 캐싱은 기본적으로 활성화되어 있다.
       # 이 작업은 이후의 gradle을 실행하는 단계들에 모두 적용된다.
