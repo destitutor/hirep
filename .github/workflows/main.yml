@@ -28,18 +28,19 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-
-			# .gradle 디렉터리 전체를 캐시하는 대신 이 build-action은
-			# 캐싱이 필요한 특정 하위 디렉터리만 선택한다. 캐싱은 기본적으로
-			# 활성화되어 있다.
-			# 이 작업은 이후의 gradle을 실행하는 단계들에 모두 적용된다.
+	  
+	  
+	  
+      # .gradle 디렉터리 전체를 캐시하는 대신 이 build-action은
+      # 캐싱이 필요한 특정 하위 디렉터리만 선택한다. 캐싱은 기본적으로 활성화되어 있다.
+      # 이 작업은 이후의 gradle을 실행하는 단계들에 모두 적용된다.
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
         with:
           arguments: clean build
 
-			# AWS 인증을 거친다.
-			# IAM 사용자 액세스 키와 비밀 키를 활용한다.
+      # AWS 인증을 거친다.
+      # IAM 사용자 액세스 키와 비밀 키를 활용한다.
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -47,10 +48,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-			# 빌드 결과물을 S3 버킷에 업로드한다.
-			# s3-location에 압축 파일을 업로드 할 S3 버킷 정보를 명시한다.
-			# 그리고 숨겨진 파일은 필요가 없으므로 번들링하지 않는다.
-			# 여기서 $GITHUB_SHA는 깃허브 자체에서 커밋마다 생성하는 랜덤한 변수값이다. 이름 충돌을 막기 위해서 사용한다.
+      # 빌드 결과물을 S3 버킷에 업로드한다.
+      # s3-location에 압축 파일을 업로드 할 S3 버킷 정보를 명시한다.
+      # 그리고 숨겨진 파일은 필요가 없으므로 번들링하지 않는다.
+      # 여기서 $GITHUB_SHA는 깃허브 자체에서 커밋마다 생성하는 랜덤한 변수값이다. 이름 충돌을 막기 위해서 사용한다.
       - name: Upload to AWS S3
         run: |
           aws deploy push \
