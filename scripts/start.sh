@@ -24,8 +24,8 @@ IDLE_PROFILE=$(find_idle_profile)
 echo "> $JAR_PATH 를 profile=$IDLE_PROFILE 로 실행합니다." >> $DEPLOY_LOG_PATH
 nohup java -jar \
  -Dspring.config.location=file:$PROJECT_ROOT_PATH/application.yml, \
- file:$PROJECT_ROOT_PATH/application-"$IDLE_PROFILE".yml \
- file:$PROJECT_ROOT_PATH/application-oauth.yml \
- file:$PROJECT_ROOT_PATH/application-db.yml \
+ file:$PROJECT_ROOT_PATH/application-"$IDLE_PROFILE".yml, \
+ file:$PROJECT_ROOT_PATH/application-oauth.yml, \
+ file:$PROJECT_ROOT_PATH/application-db.yml, \
  -Dspring.profiles.active="$IDLE_PROFILE" \
  $JAR_PATH > $APP_LOG_PATH 2> $ERROR_LOG_PATH &
