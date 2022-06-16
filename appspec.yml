@@ -1,0 +1,38 @@
+# CodeDeploy 버전을 말한다.
+version: 0.0
+os: linux
+# source에 destination으로 이동시킬 대상을 지정한다.
+# 루트 경로(/)는 전체 파일을 지칭한다.
+files:
+  - source: /
+    destination: /home/ubuntu/server/deploy
+    overwrite: yes
+
+# CodeDeploy에서 EC2 서버로 넘겨준 파일들의 소유자, 그룹을 ubuntu로 모두 설정한다.
+# 그런 뒤에 파일에 실행 권한을 부여한다. 스크립트를 실행하려면 필요하다.
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+    type:
+      - file
+
+# 스크립트 실행 제한 시간을 지정한다. 그리고 배포 단계에서 실행할 스크립트를 지정한다.
+hooks:
+  # 엔진엑스와 연결되어 있지 않은 스프링 부트를 종료함
+  AfterInstall:
+    - location: scripts/stop.sh
+      timeout: 60
+      runas: ubuntu
+  # 엔진엑스와 연결되어 있지 않은 포트로 새 버전의 스프링 부트를 시작함
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 60
+      runas: ubuntu
+  # 새 스프링 부트가 정상적으로 실행됐는지 확인함
+  ValidateService:
+    - location: scripts/health.sh
+      timeout: 60
+      runas: ubuntu

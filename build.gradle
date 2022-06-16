@@ -5,8 +5,13 @@ plugins {
     id 'java'
 }
 
+jar {
+    // 추가적인 -plain.jar 파일이 만들어지지 않도록 설정한다.
+    enabled = false
+}
+
 group = 'net.hexabrain'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1-SNAPSHOT-' + new Date().format("yyyyMMddHHmmss")
 sourceCompatibility = '11'
 
 configurations {

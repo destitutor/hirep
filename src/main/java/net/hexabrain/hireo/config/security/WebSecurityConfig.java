@@ -72,7 +72,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain loginFormFilterChain(final HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .antMatchers("/accounts/**", "/accounts", "/",
+                        .antMatchers("/accounts/**", "/accounts", "/", "/profile",
                                 "/js/**", "/sass/**", "/images/**", "/fonts/**", "/css/**").permitAll()
                         .antMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

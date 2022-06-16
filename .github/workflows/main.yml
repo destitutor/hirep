@@ -6,14 +6,15 @@ on:
   push:
     branches:
       - main
-      
+
 # 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름을 차례대로 채워넣는다.
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: hireo-springboot-build
   CODE_DEPLOY_APPLICATION_NAME: hireo-springboot-webservice
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: hireo-springboot-webservice-group
-  
+  RESOURCE_PATH: ./src/test/resources
+
 jobs:
   build-and-deploy:
     # 깃헙에서 호스팅하는 가상 서버 환경을 정의한다.
@@ -32,6 +33,14 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+
+      - name: Set up yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.RESOURCE_PATH }}/application.yml
+        env:
+          security.jwt.base64-secret: ${{ secrets.JWT_SECRET }}
+          security.jwt.expiration-time: ${{ secrets.JWT_EXPIRATION_TIME }}
 
       # .gradle 디렉터리 전체를 캐시하는 대신 이 build-action은
       # 캐싱이 필요한 특정 하위 디렉터리만 선택한다. 캐싱은 기본적으로 활성화되어 있다.
@@ -57,11 +66,11 @@ jobs:
       - name: Upload to AWS S3
         run: |
           aws deploy push \
-            --application-name ${{ env.CODE_DEPLOY_APPLICATION_nAME }} \
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
             --ignore-hidden-files \
             --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
             --source .
-            
+
       # S3 버킷에 있는 파일을 대상으로 CodeDeploy를 실행한다.
       # deployment-config-name은 배포 방식인데 기본값을 사용한다.
       - name: Deploy to AWS EC2 from S3
@@ -71,3 +80,27 @@ jobs:
             --deployment-config-name CodeDeployDefault.AllAtOnce \
             --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
             --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
+
+      # 슬랙에 알림을 보낸다.
+      - name: Send Github Action trigger data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.19.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          # 메시지가 게시될 슬랙의 채널명이다.
+          channel-id: 'hireo'
+          payload: |
+            {
+              "text": "깃허브 액션 빌드 결과: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*깃허브 액션 빌드 결과:*\n${{ job.status }}"
+                  }
+                }
+              ]
+            }
+  
