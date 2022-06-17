@@ -10,7 +10,6 @@ import net.hexabrain.hireo.web.review.dto.ReviewRequest;
 @Mapper(componentModel = "spring")
 public interface ReviewRequestMapper extends BaseMapper<ReviewRequest, Review> {
 
-	@Mapping(target = "name", ignore = true)
 	@Mapping(source = "createdDate", target = "postedAt")
 	ReviewRequest toDto(Review review);
 }

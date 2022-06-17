@@ -6,6 +6,8 @@ import lombok.Data;
 
 @Data
 public class ReviewResponse {
+	private String name;
+
 	private String title;
 
 	private String content;
