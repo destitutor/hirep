@@ -1,14 +1,15 @@
 package net.hexabrain.hireo.web.review.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+
+import javax.validation.constraints.NotEmpty;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
@@ -23,10 +24,6 @@ public class ReviewRequest {
     @NotEmpty
     @Length(min = 10, max = 150)
     private String content;
-
-    @NotNull
-    @Length(min = 1, max = 32)
-    private String name;
 
     private LocalDate postedAt;
 }

@@ -5,7 +5,7 @@
 <th:block class="layout-content">
 <!-- Titlebar
 ================================================== -->
-<div class="single-page-header" th:data-background-image="@{/images/single-company.jpg}">
+<div class="single-page-header" data-background-image="/images/single-company.jpg">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -16,7 +16,7 @@
 							<h3><th:block th:text="${company.name}">회사명</th:block> <span>소프트웨어 하우스</span></h3>
 							<ul>
 								<li><div class="star-rating"
-										 th:data-rating="${#numbers.formatDecimal(company.averageRating, 0, 1)}"></div></li>
+										 th:data-rating="${#numbers.formatDecimal(company.averageRating, 1, 1)}"></div></li>
 								<li><img class="flag" th:src="@{/images/flags/kr.svg}" alt=""> 한국</li>
 								<li><div th:if="${company.isVerified}" class="verified-badge-with-title">인증됨</div></li>
 							</ul>
@@ -74,10 +74,11 @@
 						<div class="boxed-list-item">
 							<!-- Content -->
 							<div class="item-content">
-								<h4><th:block th:text="${review.title}">리뷰 제목</th:block> <span>익명의 사용자</span></h4>
+								<h4><th:block th:text="${review.title}">리뷰 제목</th:block> <span th:text="${review.name}">익명의 사용자</span></h4>
 								<div class="item-details margin-top-10">
 									<div class="star-rating" th:data-rating="${review.rating}"></div>
-									<div class="detail-item"><i class="icon-material-outline-date-range"></i> <th:block th:text="${review.postedAt}">작성일</th:block></div>
+									<div class="detail-item"><i class="icon-material-outline-date-range"></i>
+										<th:block th:text="${#temporals.format(review.postedAt, 'yyyy년 M월')}">작성일</th:block></div>
 								</div>
 								<div class="item-description">
 									<p th:text="${review.content}">리뷰 내용</p>
@@ -214,16 +215,9 @@
 
 				<div class="row">
 					<div class="col-xl-12">
-						<div class="input-with-icon-left" th:title="#{tooltip.reviews.name}" data-tippy-placement="bottom">
-							<i class="icon-material-outline-account-circle"></i>
-							<input type="text" class="input-text with-border" name="name" id="name" th:placeholder="#{name}" required/>
-						</div>
-					</div>
-
-					<div class="col-xl-12">
 						<div class="input-with-icon-left">
 							<i class="icon-material-outline-rate-review"></i>
-							<input type="text" class="input-text with-border" name="title" id="title" th:placeholder="#{title}" required/>
+							<input type="text" pattern=".{1,32}" class="input-text with-border" name="title" id="title" th:placeholder="#{title}" required/>
 						</div>
 					</div>
 				</div>

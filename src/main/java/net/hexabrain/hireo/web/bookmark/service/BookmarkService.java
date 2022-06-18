@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import net.hexabrain.hireo.web.account.domain.Account;
 import net.hexabrain.hireo.web.account.repository.AccountRepository;
 import net.hexabrain.hireo.web.bookmark.domain.Bookmark;
-import net.hexabrain.hireo.web.bookmark.dto.BookmarkedCompanyResponse;
-import net.hexabrain.hireo.web.bookmark.dto.mapper.BookmarkMapper;
+import net.hexabrain.hireo.web.bookmark.dto.BookmarkedCompanyResponseDto;
+import net.hexabrain.hireo.web.bookmark.dto.mapper.BookmarkedCompanyMapper;
 import net.hexabrain.hireo.web.bookmark.repository.BookmarkRepository;
 import net.hexabrain.hireo.web.common.exception.bookmark.AlreadyBookmarkedException;
 import net.hexabrain.hireo.web.company.domain.Company;
@@ -32,9 +32,9 @@ public class BookmarkService {
     private final CompanyRepository companyRepository;
     private final JobRepository jobRepository;
     private final AccountRepository accountRepository;
-    private final BookmarkMapper bookmarkMapper;
+    private final BookmarkedCompanyMapper bookmarkMapper;
 
-    public Page<BookmarkedCompanyResponse> getCompanyBookmarks(User user, Pageable pageable) {
+    public Page<BookmarkedCompanyResponseDto> getCompanyBookmarks(User user, Pageable pageable) {
         Page<Bookmark> bookmarks = bookmarkRepository.findAllCompanyBookmarks(user.getUsername(), pageable);
         return new PageImpl<>(
             bookmarks.stream()

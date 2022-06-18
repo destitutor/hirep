@@ -1066,6 +1066,96 @@ $(document).ready(function(){
 	});
 
 	/*----------------------------------------------------*/
+	/*  Validation
+	/*----------------------------------------------------*/
+	// when form is submitted
+	$('#job-submit').on('click', function(e) {
+		var validated = validatePostJobForm();
+		if (validated) {
+			const token = $("meta[name='_csrf']").attr("content");
+			const title = $("#title").val();
+			const type = $("#type").val();
+			const category = $("#category").val();
+			const salary_min = $("#min").val();
+			const salary_max = $("#max").val();
+
+			$.ajax({
+				type: "POST",
+				url: "/accounts/jobs/post",
+				headers: {'X-CSRF-TOKEN': token},
+				data: {
+					name: title,
+					type: type,
+					category: category,
+					min: salary_min,
+					max: salary_max,
+					tags: getTags()
+				},
+				success: function(data) {
+					console.log(data);
+					alert(data);
+				}
+			});
+		}
+	});
+
+	function getTags() {
+		let tags = [];
+		$(".keyword-text").each(function() {
+			tags.push($(this).text());
+		});
+		return tags;
+	}
+
+	function validatePostJobForm() {
+		const title = $("#title").val();
+		const type = $("#type").val();
+		const category = $("#category").val();
+		let salary_min = $("#min").val();
+		let salary_max = $("#max").val();
+
+		if (!(title.length > 0 && title.length < 32)) {
+			alert("제목은 1자 이상 32자 이하로 입력해주세요.");
+			return false;
+		}
+
+		if (type === "") {
+			alert("고용형태를 선택해주세요.");
+			return false;
+		}
+
+		if (category === "") {
+			alert("직종을 선택해주세요.");
+			return false;
+		}
+
+		if (salary_min === "") {
+			alert("최소 연봉을 입력해주세요.");
+			return false;
+		}
+
+		if (salary_max === "") {
+			alert("최대 연봉을 입력해주세요.");
+			return false;
+		}
+
+		if (!(salary_min.match(/^[0-9]+$/) && salary_max.match(/^[0-9]+$/))) {
+			alert("연봉은 0보다 큰 정수로 입력해주세요.");
+			return false;
+		}
+
+		salary_min = parseInt(salary_min);
+		salary_max = parseInt(salary_max);
+
+		if (salary_min > salary_max) {
+			alert("최소 연봉은 최대 연봉보다 작아야 합니다.");
+			return false;
+		}
+
+		return true;
+	}
+
+	/*----------------------------------------------------*/
 	/*  Login
 	/*----------------------------------------------------*/
 	$('.kakao-login').click(function(e) {

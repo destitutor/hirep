@@ -15,6 +15,8 @@ public class JobDto {
 
     private String name;
 
+    private String description;
+
     private JobType jobType;
 
     private int startSalary;

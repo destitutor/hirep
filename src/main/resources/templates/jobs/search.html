@@ -17,7 +17,6 @@
 						<div class="keywords-container">
 							<div class="keyword-input-container">
 								<input type="text" class="keyword-input" id="keyword" name="keyword" th:placeholder="#{keywords.input.placeholder}"/>
-								<button type="button" class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
 							</div>
 							<div class="keywords-list"><!-- keywords go here --></div>
 							<div class="clearfix"></div>
@@ -73,44 +72,6 @@
 						<!-- Range Slider -->
 						<input class="range-slider" name="salary" id="salary" type="text" value="" data-slider-currency="$" data-slider-min="1500" data-slider-max="30000" data-slider-step="100" data-slider-value="[1500,30000]"/>
 					</div>
-
-					<!-- Tags -->
-					<div class="sidebar-widget">
-						<h3 th:text="#{tags}">태그</h3>
-
-						<div class="tags-container">
-							<div class="tag">
-								<input type="checkbox" id="tag1"/>
-								<label for="tag1">front-end dev</label>
-							</div>
-							<div class="tag">
-								<input type="checkbox" id="tag2"/>
-								<label for="tag2">angular</label>
-							</div>
-							<div class="tag">
-								<input type="checkbox" id="tag3"/>
-								<label for="tag3">react</label>
-							</div>
-							<div class="tag">
-								<input type="checkbox" id="tag4"/>
-								<label for="tag4">vue js</label>
-							</div>
-							<div class="tag">
-								<input type="checkbox" id="tag5"/>
-								<label for="tag5">web apps</label>
-							</div>
-							<div class="tag">
-								<input type="checkbox" id="tag6"/>
-								<label for="tag6">design</label>
-							</div>
-							<div class="tag">
-								<input type="checkbox" id="tag7"/>
-								<label for="tag7">wordpress</label>
-							</div>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-
 				</div>
 				<!-- Sidebar Container / End -->
 
@@ -132,9 +93,6 @@
 			<h3 class="page-title" th:text="#{search-results}">검색 결과</h3>
 
 			<div class="notify-box margin-top-15">
-				<div class="switch-container">
-					<label class="switch"><input type="checkbox"><span class="switch-button"></span><span class="switch-text" th:text="#{search.turn-on-email-notifications}">이 검색 결과를 이메일로 알림</span></label>
-				</div>
 
 				<div class="sort-by">
 					<span th:text="|#{sort-by}:|">정렬:</span>

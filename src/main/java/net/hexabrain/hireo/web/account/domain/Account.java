@@ -65,16 +65,4 @@ public abstract class Account extends BaseTimeEntity {
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
     }
-
-    public boolean isCompanyBookmarked(Long companyId) {
-        return bookmarks.stream()
-                .filter(bookmark -> bookmark.getCompany() != null)
-                .anyMatch(bookmark -> bookmark.getCompany().getId().equals(companyId));
-    }
-
-    public boolean isJobBookmarked(Long jobId) {
-        return bookmarks.stream()
-                .filter(bookmark -> bookmark.getJob() != null)
-                .anyMatch(bookmark -> bookmark.getJob().getId().equals(jobId));
-    }
 }
