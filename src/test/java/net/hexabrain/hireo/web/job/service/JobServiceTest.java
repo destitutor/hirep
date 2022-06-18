@@ -5,14 +5,11 @@ import static org.mockito.Mockito.*;
 
 import java.util.Collections;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,7 +26,6 @@ import net.hexabrain.hireo.web.job.dto.JobPostRequestDto;
 import net.hexabrain.hireo.web.job.dto.mapper.JobMapper;
 import net.hexabrain.hireo.web.job.dto.mapper.JobPostRequestMapper;
 import net.hexabrain.hireo.web.job.repository.JobRepository;
-import net.hexabrain.hireo.web.job.repository.TagRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JobServiceTest {
@@ -45,9 +41,6 @@ class JobServiceTest {
 	@Mock
 	AccountRepository accountRepository;
 
-	@Mock
-	TagRepository tagRepository;
-
 	JobService service;
 
 	User user;
@@ -55,12 +48,11 @@ class JobServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		service = spy(new JobService(tagRepository, jobRepository, accountRepository,
+		service = spy(new JobService(jobRepository, accountRepository,
 			jobMapper, jobPostRequestMapper));
 
 		user = new User("USER", "", Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
 		postRequest = JobPostRequestDto.builder()
-			.tags(new String[] { "tag1", "tag2" })
 			.build();
 	}
 
@@ -95,8 +87,6 @@ class JobServiceTest {
 		service.post(user, postRequest);
 
 		// then
-		int tagLength = postRequest.getTags().length;
 		verify(jobRepository).save(any(Job.class));
-		verify(tagRepository, times(tagLength)).save(any(Tag.class));
 	}
 }

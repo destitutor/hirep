@@ -6,6 +6,9 @@ import net.hexabrain.hireo.web.common.exception.company.AccountNotFoundException
 import net.hexabrain.hireo.web.common.exception.company.BookmarkNotFoundException;
 import net.hexabrain.hireo.web.common.exception.company.CompanyNotFoundException;
 import net.hexabrain.hireo.web.common.exception.company.JobNotFoundException;
+import net.hexabrain.hireo.web.common.exception.company.NoSuchJobCategoryException;
+import net.hexabrain.hireo.web.common.exception.company.NoSuchJobTypeException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +29,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             BookmarkNotFoundException.class, CompanyNotFoundException.class, AccountNotFoundException.class,
-            JobNotFoundException.class})
+            JobNotFoundException.class, NoSuchJobTypeException.class, NoSuchJobCategoryException.class})
     public ResponseEntity<ErrorResponse> handleNotFound(Exception exception) {
         log.info("Not found: {}", exception.toString());
         return ResponseEntity
