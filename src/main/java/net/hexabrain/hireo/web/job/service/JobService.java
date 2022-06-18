@@ -16,14 +16,13 @@ import net.hexabrain.hireo.web.account.repository.AccountRepository;
 import net.hexabrain.hireo.web.common.exception.company.UnauthorizedException;
 import net.hexabrain.hireo.web.job.domain.Job;
 import net.hexabrain.hireo.web.job.domain.QJob;
-import net.hexabrain.hireo.web.job.domain.Tag;
+import net.hexabrain.hireo.web.job.dto.JobDto;
 import net.hexabrain.hireo.web.job.dto.JobPostRequestDto;
 import net.hexabrain.hireo.web.job.dto.SearchRequest;
 import net.hexabrain.hireo.web.job.dto.SearchResult;
 import net.hexabrain.hireo.web.job.dto.mapper.JobMapper;
 import net.hexabrain.hireo.web.job.dto.mapper.JobPostRequestMapper;
 import net.hexabrain.hireo.web.job.repository.JobRepository;
-import net.hexabrain.hireo.web.job.repository.TagRepository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -38,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @RequiredArgsConstructor
 public class JobService {
-    private final TagRepository tagRepository;
     private final JobRepository jobRepository;
     private final AccountRepository accountRepository;
 
@@ -53,18 +51,7 @@ public class JobService {
         Job job = jobPostRequestMapper.toEntity(dto);
         job.setCompany(((Employer)account).getCompany());
         job = jobRepository.save(job);
-
-        registerTagsForJob(job, dto.getTags());
         return job.getId();
-    }
-
-    private void registerTagsForJob(Job job, String[] tags) {
-        for (String tag : tags) {
-            tagRepository.save(Tag.builder()
-                .name(tag)
-                .job(job)
-                .build());
-        }
     }
 
     private void validatePoster(Account poster) {
@@ -128,8 +115,9 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public Job findOne(Long id) {
-        return jobRepository.findById(id).get();
+    public JobDto findOne(Long id) {
+        Job foundJob = jobRepository.findByIdOrThrow(id);
+        return jobMapper.toDto(foundJob);
     }
 
     @Transactional(readOnly = true)

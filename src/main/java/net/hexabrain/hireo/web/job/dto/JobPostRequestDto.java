@@ -26,7 +26,5 @@ public class JobPostRequestDto {
 	@Min(1)
 	private int max;
 
-	private String[] tags;
-
 	private Long companyId;
 }

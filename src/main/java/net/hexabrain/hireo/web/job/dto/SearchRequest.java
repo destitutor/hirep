@@ -1,10 +1,9 @@
 package net.hexabrain.hireo.web.job.dto;
 
-import lombok.Data;
 import net.hexabrain.hireo.web.job.domain.Category;
 import net.hexabrain.hireo.web.job.domain.JobType;
 
-import java.util.List;
+import lombok.Data;
 
 @Data
 public class SearchRequest {
@@ -15,8 +14,6 @@ public class SearchRequest {
     private JobType jobType;
 
     private String salary;
-
-    private List<String> tags;
 
     private double lng;
 
