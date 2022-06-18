@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import net.hexabrain.hireo.web.bookmark.dto.BookmarkedCompanyResponse;
+import net.hexabrain.hireo.web.bookmark.dto.BookmarkedCompanyResponseDto;
 import net.hexabrain.hireo.web.bookmark.service.BookmarkService;
 import net.hexabrain.hireo.web.common.security.CurrentUser;
 
@@ -23,7 +23,7 @@ public class BookmarkController {
         @CurrentUser User user,
         Model model
     ) {
-        Page<BookmarkedCompanyResponse> companyBookmarks = bookmarkService.getCompanyBookmarks(user,
+        Page<BookmarkedCompanyResponseDto> companyBookmarks = bookmarkService.getCompanyBookmarks(user,
             Pageable.ofSize(5));
         model.addAttribute("companyBookmarks", companyBookmarks);
         return "/account/bookmark";

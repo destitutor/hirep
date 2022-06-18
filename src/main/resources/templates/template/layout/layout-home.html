@@ -38,8 +38,8 @@
                     <!-- Logo -->
                     <div id="logo">
                         <a href="/"><img th:src="${isTransparentHeader} ? @{/images/logo2.png} : @{/images/logo.png}"
-                                         th:data-sticky-logo="@{/images/logo.png}"
-                                         th:data-transparent-logo="@{/images/logo2.png}"
+                                         th:data-sticky-logo="/images/logo.png"
+                                         th:data-transparent-logo="/images/logo2.png"
                                          alt=""></a>
                     </div>
 
@@ -98,14 +98,6 @@
                                             <div class="user-name">
                                                 김철수 <span th:text="#{freelancer}">프리랜서</span>
                                             </div>
-                                        </div>
-
-                                        <!-- User Status Switcher -->
-                                        <div class="status-switch" id="snackbar-user-status">
-                                            <label class="user-online current-status" th:text="#{online}">온라인</label>
-                                            <label class="user-invisible" th:text="#{invisible}">오프라인 표시</label>
-                                            <!-- Status Indicator -->
-                                            <span class="status-indicator" aria-hidden="true"></span>
                                         </div>
                                     </div>
 
@@ -420,19 +412,6 @@
 
 <!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
 <script>
-    // Snackbar for user status switcher
-    $('#snackbar-user-status label').click(function() {
-        Snackbar.show({
-            text: '상태가 변경되었습니다!',
-            pos: 'bottom-center',
-            showAction: false,
-            actionText: "Dismiss",
-            duration: 3000,
-            textColor: '#fff',
-            backgroundColor: '#383838'
-        });
-    });
-
     // Snackbar for copy to clipboard button
     $('.copy-url-button').click(function() {
         Snackbar.show({

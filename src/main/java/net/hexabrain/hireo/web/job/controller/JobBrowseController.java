@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import net.hexabrain.hireo.web.account.service.AccountService;
 import net.hexabrain.hireo.web.common.security.CurrentUser;
-import net.hexabrain.hireo.web.job.domain.Job;
+import net.hexabrain.hireo.web.job.dto.JobDto;
 import net.hexabrain.hireo.web.job.dto.SearchRequest;
 import net.hexabrain.hireo.web.job.service.JobService;
 
@@ -41,7 +41,7 @@ public class JobBrowseController {
         Model model,
         @PathVariable("id") Long id
     ) {
-        Job foundJob = jobService.findOne(id);
+        JobDto foundJob = jobService.findOne(id);
         model.addAttribute("company", foundJob.getCompany());
         model.addAttribute("job", foundJob);
         model.addAttribute("account", accountService.findByEmail(user.getUsername()));

@@ -17,7 +17,7 @@
 							<ul>
 								<li><a th:href="@{/companies/{companyId}(companyId=${company.id})}"><i class="icon-material-outline-business"></i>
 									<th:block th:text="${company.name}">회사명</th:block></a></li>
-								<li><div class="star-rating" th:data-rating="${#numbers.formatDecimal(company.getAvgRating(), 1, 1)}"></div></li>
+								<li><div class="star-rating" th:data-rating="${#numbers.formatDecimal(company.averageRating, 1, 1)}"></div></li>
 								<li><img class="flag" src="../images/flags/kr.svg" alt=""> 한국</li>
 								<li><div th:if="${company.isVerified}" class="verified-badge-with-title">인증됨</div></li>
 							</ul>

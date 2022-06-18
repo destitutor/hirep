@@ -7,7 +7,7 @@ import net.hexabrain.hireo.web.company.dto.CompanyResponse;
 import lombok.Data;
 
 @Data
-public class BookmarkedCompanyResponse {
+public class BookmarkedCompanyResponseDto {
 	private Long id;
 
 	private CompanyResponse company;

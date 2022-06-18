@@ -35,7 +35,7 @@
 									<ul>
 										<li><a href="dashboard-manage-jobs.html"><th:block th:text="#{organize.jobs.manage}">구인 관리</th:block> <span class="nav-tag">3</span></a></li>
 										<li><a href="dashboard-manage-candidates.html" th:text="#{organize.candidates.manage}">지원자 관리</a></li>
-										<li><a href="dashboard-post-a-job.html" th:text="#{organize.jobs.post}">구인 등록</a></li>
+										<li><a th:href="@{/accounts/jobs/post}" th:text="#{organize.jobs.post}">구인 등록</a></li>
 									</ul>
 								</li>
 							</ul>
