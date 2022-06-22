@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import net.hexabrain.hireo.utils.HangulUtils;
 import net.hexabrain.hireo.web.company.domain.Company;
 import net.hexabrain.hireo.web.company.domain.QCompany;
-import net.hexabrain.hireo.web.company.dto.CompanyProfileResponse;
-import net.hexabrain.hireo.web.company.dto.mapper.CompanyProfileMapper;
+import net.hexabrain.hireo.web.company.dto.CompanyDetailsResponse;
+import net.hexabrain.hireo.web.company.dto.mapper.CompanyDetailsMapper;
 import net.hexabrain.hireo.web.company.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +20,9 @@ public class CompanyService {
     @PersistenceContext
     private EntityManager entityManager;
     private final CompanyRepository companyRepository;
-    private final CompanyProfileMapper companyProfileMapper;
+    private final CompanyDetailsMapper companyProfileMapper;
 
-    public CompanyProfileResponse findOne(Long id) {
+    public CompanyDetailsResponse findOne(Long id) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QCompany company = QCompany.company;
         Company domain = queryFactory

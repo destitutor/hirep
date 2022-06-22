@@ -11,7 +11,7 @@ import org.thymeleaf.util.StringUtils;
 import net.hexabrain.hireo.utils.HangulUtils;
 import net.hexabrain.hireo.web.account.service.AccountService;
 import net.hexabrain.hireo.web.common.security.CurrentUser;
-import net.hexabrain.hireo.web.company.dto.CompanyProfileResponse;
+import net.hexabrain.hireo.web.company.dto.CompanyDetailsResponse;
 import net.hexabrain.hireo.web.company.service.CompanyService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class CompanyController {
             return "redirect:/error/404";
         }
 
-        CompanyProfileResponse foundCompany = companyService.findOne(id);
+        CompanyDetailsResponse foundCompany = companyService.findOne(id);
         model.addAttribute("company", foundCompany);
         model.addAttribute("reviews", foundCompany.getReviews());
         model.addAttribute("account", accountService.findByEmail(user.getUsername()));

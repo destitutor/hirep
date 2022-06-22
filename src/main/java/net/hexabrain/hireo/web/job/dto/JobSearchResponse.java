@@ -9,14 +9,14 @@ import java.util.List;
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class SearchResult {
-    private List<JobDto> jobs;
+public class JobSearchResponse {
+    private List<JobInfoResponse> jobs;
 
     private int page;
 
     private int totalPages;
 
-    private long totalResults;
+    private long totalElements;
 
     private int pageSize;
 }

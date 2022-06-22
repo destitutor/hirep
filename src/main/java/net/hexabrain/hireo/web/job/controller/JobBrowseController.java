@@ -6,12 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import net.hexabrain.hireo.web.account.service.AccountService;
 import net.hexabrain.hireo.web.common.security.CurrentUser;
-import net.hexabrain.hireo.web.job.dto.JobDto;
-import net.hexabrain.hireo.web.job.dto.SearchRequest;
+import net.hexabrain.hireo.web.job.dto.JobDetailsResponse;
+import net.hexabrain.hireo.web.job.dto.JobSearchRequest;
 import net.hexabrain.hireo.web.job.service.JobService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,10 +26,10 @@ public class JobBrowseController {
     public String list(
         @CurrentUser User user,
         Model model,
-        SearchRequest searchRequest,
-        @RequestParam(defaultValue = "1") int page
+        JobSearchRequest searchRequest
     ) {
-        model.addAttribute("results", jobService.search(searchRequest, page));
+        model.addAttribute("request", searchRequest);
+        model.addAttribute("results", jobService.search(searchRequest));
         model.addAttribute("account", accountService.findByEmail(user.getUsername()));
         return "jobs/search";
     }
@@ -41,7 +40,7 @@ public class JobBrowseController {
         Model model,
         @PathVariable("id") Long id
     ) {
-        JobDto foundJob = jobService.findOne(id);
+        JobDetailsResponse foundJob = jobService.findOne(id);
         model.addAttribute("company", foundJob.getCompany());
         model.addAttribute("job", foundJob);
         model.addAttribute("account", accountService.findByEmail(user.getUsername()));

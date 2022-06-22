@@ -1,17 +1,20 @@
 package net.hexabrain.hireo.web.job.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.hexabrain.hireo.web.job.domain.Category;
 import net.hexabrain.hireo.web.job.domain.JobType;
 
 import lombok.Data;
 
 @Data
-public class SearchRequest {
+public class JobSearchRequest {
     private String keyword;
 
-    private Category category;
+    private List<String> categories;
 
-    private JobType jobType;
+    private List<String> jobType;
 
     private String salary;
 
@@ -19,7 +22,11 @@ public class SearchRequest {
 
     private double lat;
 
-    private double radius;
+    private double radius = 5;
+
+    private int page = 1;
+
+    private SortType sort = SortType.RECENT;
 
     public int getStartSalary() {
         if (salary == null) {
@@ -36,5 +43,17 @@ public class SearchRequest {
         }
         String[] splittedData = this.salary.split(",");
         return Integer.parseInt(splittedData[1]);
+    }
+
+    public List<Category> getCategoriesAsEnum() {
+        return categories.stream()
+            .map(Category::from)
+            .collect(Collectors.toList());
+    }
+
+    public List<JobType> getJobTypesAsEnum() {
+        return jobType.stream()
+            .map(JobType::from)
+            .collect(Collectors.toList());
     }
 }

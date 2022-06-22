@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import net.hexabrain.hireo.web.common.exception.company.AccountNotFoundException;
-import net.hexabrain.hireo.web.common.exception.company.UnauthorizedException;
 import net.hexabrain.hireo.web.common.security.CurrentUser;
-import net.hexabrain.hireo.web.job.dto.JobPostRequestDto;
+import net.hexabrain.hireo.web.job.dto.JobPostRequest;
 import net.hexabrain.hireo.web.job.service.JobService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +31,7 @@ public class JobManageController {
 	@PostMapping("/post")
 	public String post(
 		@CurrentUser User user,
-		@Valid JobPostRequestDto dto,
+		@Valid JobPostRequest dto,
 		BindingResult bindingResult
 	) {
 		if (bindingResult.hasErrors()) {

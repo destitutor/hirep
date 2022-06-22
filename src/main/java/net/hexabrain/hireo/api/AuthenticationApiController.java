@@ -2,7 +2,7 @@ package net.hexabrain.hireo.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
-import net.hexabrain.hireo.api.dto.LoginDto;
+import net.hexabrain.hireo.api.dto.LoginRequest;
 import net.hexabrain.hireo.config.security.jwt.JwtAuthTokenFilter;
 import net.hexabrain.hireo.config.security.jwt.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class AuthenticationApiController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginDto loginRequest) {
+    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
 

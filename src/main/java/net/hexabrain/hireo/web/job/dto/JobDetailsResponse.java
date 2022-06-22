@@ -1,16 +1,17 @@
 package net.hexabrain.hireo.web.job.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import net.hexabrain.hireo.web.company.dto.CompanyProfileResponse;
+import java.time.LocalDateTime;
+
+import net.hexabrain.hireo.web.company.dto.CompanyDetailsResponse;
 import net.hexabrain.hireo.web.job.domain.Category;
 import net.hexabrain.hireo.web.job.domain.JobType;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class JobDto {
+public class JobDetailsResponse {
     private Long id;
 
     private String name;
@@ -27,5 +28,5 @@ public class JobDto {
 
     private Category category;
 
-    private CompanyProfileResponse company;
+    private CompanyDetailsResponse company;
 }

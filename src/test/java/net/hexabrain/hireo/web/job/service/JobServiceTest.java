@@ -21,19 +21,22 @@ import net.hexabrain.hireo.web.account.domain.Freelancer;
 import net.hexabrain.hireo.web.account.repository.AccountRepository;
 import net.hexabrain.hireo.web.common.exception.company.UnauthorizedException;
 import net.hexabrain.hireo.web.job.domain.Job;
-import net.hexabrain.hireo.web.job.domain.Tag;
-import net.hexabrain.hireo.web.job.dto.JobPostRequestDto;
-import net.hexabrain.hireo.web.job.dto.mapper.JobMapper;
+import net.hexabrain.hireo.web.job.dto.JobPostRequest;
+import net.hexabrain.hireo.web.job.dto.mapper.JobDetailsMapper;
+import net.hexabrain.hireo.web.job.dto.mapper.JobInfoMapper;
 import net.hexabrain.hireo.web.job.dto.mapper.JobPostRequestMapper;
 import net.hexabrain.hireo.web.job.repository.JobRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JobServiceTest {
 	@Mock
+	JobInfoMapper jobInfoMapper;
+
+	@Mock
 	JobPostRequestMapper jobPostRequestMapper;
 
 	@Mock
-	JobMapper jobMapper;
+	JobDetailsMapper jobDetailsMapper;
 
 	@Mock
 	JobRepository jobRepository;
@@ -44,15 +47,15 @@ class JobServiceTest {
 	JobService service;
 
 	User user;
-	JobPostRequestDto postRequest;
+	JobPostRequest postRequest;
 
 	@BeforeEach
 	void setUp() {
 		service = spy(new JobService(jobRepository, accountRepository,
-			jobMapper, jobPostRequestMapper));
+			jobInfoMapper, jobDetailsMapper, jobPostRequestMapper));
 
 		user = new User("USER", "", Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
-		postRequest = JobPostRequestDto.builder()
+		postRequest = JobPostRequest.builder()
 			.build();
 	}
 

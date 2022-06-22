@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
-public class CompanyProfileResponse {
+public class CompanyDetailsResponse {
     private Long id;
 
     private String name;
@@ -26,7 +26,7 @@ public class CompanyProfileResponse {
     private boolean isVerified;
 
     @Builder
-    public CompanyProfileResponse(Long id, String name, String description, AddressResponse address,
+    public CompanyDetailsResponse(Long id, String name, String description, AddressResponse address,
         List<ReviewResponse> reviews, boolean isVerified) {
         this.id = id;
         this.name = name;

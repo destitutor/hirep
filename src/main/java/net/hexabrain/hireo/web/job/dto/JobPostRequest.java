@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class JobPostRequestDto {
+public class JobPostRequest {
 	@Length(min = 1, max = 32)
 	private String name;
 

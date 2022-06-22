@@ -3,7 +3,7 @@ package net.hexabrain.hireo.web.company.dto;
 import lombok.Data;
 
 @Data
-public class CompanyResponse {
+public class CompanyInfoResponse {
 	private Long id;
 
 	private String name;

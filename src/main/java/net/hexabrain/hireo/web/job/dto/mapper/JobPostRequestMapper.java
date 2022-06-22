@@ -10,19 +10,19 @@ import net.hexabrain.hireo.web.common.mapper.BaseMapper;
 import net.hexabrain.hireo.web.job.domain.Category;
 import net.hexabrain.hireo.web.job.domain.Job;
 import net.hexabrain.hireo.web.job.domain.JobType;
-import net.hexabrain.hireo.web.job.dto.JobPostRequestDto;
+import net.hexabrain.hireo.web.job.dto.JobPostRequest;
 
 @Mapper(componentModel = "spring")
-public interface JobPostRequestMapper extends BaseMapper<JobPostRequestDto, Job> {
+public interface JobPostRequestMapper extends BaseMapper<JobPostRequest, Job> {
 
 	@Mapping(target = "company", ignore = true)
 	@Mapping(source = "min", target = "startSalary")
 	@Mapping(source = "max", target = "endSalary")
 	@Mapping(source = "type", target = "jobType")
-	Job toEntity(JobPostRequestDto dto);
+	Job toEntity(JobPostRequest dto);
 
 	@BeforeMapping
-	default void beforeMapping(JobPostRequestDto dto) {
+	default void beforeMapping(JobPostRequest dto) {
 		dto.setCategory(mapToCategory(dto.getCategory()));
 		dto.setType(mapToJobType(dto.getType()));
 	}
@@ -40,7 +40,7 @@ public interface JobPostRequestMapper extends BaseMapper<JobPostRequestDto, Job>
 	private String mapToJobType(String jobType) {
 		JobType[] jobTypes = JobType.values();
 		for (JobType element : jobTypes) {
-			if (element.name().equals(jobType) || element.getName().equals(jobType)) {
+			if (element.name().equals(jobType) || element.getTypeName().equals(jobType)) {
 				return element.name();
 			}
 		}

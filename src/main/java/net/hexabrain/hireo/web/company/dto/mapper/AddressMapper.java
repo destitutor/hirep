@@ -7,5 +7,5 @@ import net.hexabrain.hireo.web.company.domain.Address;
 import net.hexabrain.hireo.web.company.dto.AddressResponse;
 
 @Mapper(componentModel = "spring")
-public interface AddressResponseMapper extends BaseMapper<Address, AddressResponse> {
+public interface AddressMapper extends BaseMapper<Address, AddressResponse> {
 }

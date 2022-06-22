@@ -37,9 +37,9 @@
 
                     <!-- Logo -->
                     <div id="logo">
-                        <a href="/"><img th:src="${isTransparentHeader} ? @{/images/logo2.png} : @{/images/logo.png}"
-                                         th:data-sticky-logo="/images/logo.png"
-                                         th:data-transparent-logo="/images/logo2.png"
+                        <a href="/"><img th:src="${isTransparentHeader} ? '/images/logo2.png' : '/images/logo.png'"
+                                         th:data-sticky-logo="'/images/logo.png'"
+                                         th:data-transparent-logo="'/images/logo2.png'"
                                          alt=""></a>
                     </div>
 
